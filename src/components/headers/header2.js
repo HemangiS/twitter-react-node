@@ -3,13 +3,16 @@
 import React, { Component } from 'react';
 var path = require('../../../public/images/logo.png');
 
-class Header1 extends Component {
+class Header2 extends Component {
+
   render(){
-    let imgLogo = {
-      width: '30px',
-      height: '30px',
-      paddingBottom: '3px'
-    }
+
+  let imgLogo = {
+    width: '30px',
+    height: '30px',
+    paddingBottom: '3px'
+  }
+
     return(
       <div>
         <nav className="navbar navbar-default">
@@ -28,31 +31,39 @@ class Header1 extends Component {
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="/">
+                  <a href="/welcome">
                     <i className="clr glyphicon glyphicon-home">
                       &nbsp;Home
                     </i>
                   </a>
                 </li>
                 <li>
-                  <a href="/register">
+                  <a href="/yourprofile">
                     <i className="clr glyphicon glyphicon-edit">
-                      &nbsp;Register
+                      &nbsp;Profile
                     </i>
                   </a>
                 </li>
 
                 <li>
-                  <a href="/login">
+                  <a href="/followers">
                     <i className="clr glyphicon glyphicon-user">
-                      &nbsp;LogIn
+                      &nbsp;Followers
                     </i>
                   </a>
                 </li>
                 <li>
-                  <a href="/twitter.com/about">
-                    <i className="clr glyphicon glyphicon-search">
-                      &nbsp;About us
+                  <a href="/editprofile">
+                    <i className="clr glyphicon glyphicon-pencil">
+                      &nbsp;EditProfile
+                    </i>
+                  </a>
+                </li>
+
+                <li>
+                  <a href="/logout">
+                    <i className="clr glyphicon glyphicon-off">
+                      &nbsp;Logout
                     </i>
                   </a>
                 </li>
@@ -66,51 +77,4 @@ class Header1 extends Component {
   }
 }
 
-export default Header1;
-
-// without active
-
-// import React, { Component } from 'react';
-
-// class Header1 extends Component {
-
-//   render(){
-//     console.log(this.context);
-//     return(
-//       <div>
-//         <ul className="nav nav-tabs">
-//           <li>
-//             <a href="/">
-//               <i className="clr glyphicon glyphicon-home">
-//                 &nbsp;Home
-//               </i>
-//             </a>
-//           </li>
-//           <li>
-//             <a href="/register">
-//               <i className="clr glyphicon glyphicon-pencil">
-//                 &nbsp;SignUp
-//               </i>
-//             </a>
-//           </li>
-//           <li>
-//             <a href="/login">
-//               <i className="clr glyphicon glyphicon-user">
-//                 &nbsp;LogIn
-//               </i>
-//             </a>
-//           </li>
-//           <li>
-//             <a href="https://twitter.com/about">
-//               <i className="clr glyphicon glyphicon-search">
-//                 &nbsp;About us
-//               </i>
-//             </a>
-//           </li>
-//         </ul>
-//       </div>
-//     );
-//   }
-// }
-
-// export default Header1;
+export default Header2;
