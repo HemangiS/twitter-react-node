@@ -1,17 +1,39 @@
 // active working
 
 import React, { Component } from 'react';
+import { Link } from 'react-router';
+import cookie from 'react-cookie';
 var path = require('../../../public/images/logo.png');
 
 class Header2 extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state={
+      data:'',
+      user_id: ''
+    }
+
+  }
+
+  componentWillMount() {
+    this.setState({user_id: cookie.load('user_id')});
+  }
+
   render(){
 
-  let imgLogo = {
-    width: '30px',
-    height: '30px',
-    paddingBottom: '3px'
-  }
+    let imgLogo = {
+      width: '30px',
+      height: '30px',
+      paddingBottom: '3px'
+    }
+
+    let id = this.state.user_id;
+
+    let welcome = `/welcome/${id}`;
+    let yourprofile = `/yourprofile/${id}`;
+    let followers = `/followers/${id}`;
+    let editprofile = `/editprofile/${id}`;
 
     return(
       <div>
@@ -31,41 +53,42 @@ class Header2 extends Component {
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="/welcome">
+
+                  <Link to={welcome}>
                     <i className="clr glyphicon glyphicon-home">
                       &nbsp;Home
                     </i>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/yourprofile">
+                  <Link to={yourprofile}>
                     <i className="clr glyphicon glyphicon-edit">
                       &nbsp;Profile
                     </i>
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a href="/followers">
+                  <Link to={followers}>
                     <i className="clr glyphicon glyphicon-user">
                       &nbsp;Followers
                     </i>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/editprofile">
+                  <Link to={editprofile}>
                     <i className="clr glyphicon glyphicon-pencil">
                       &nbsp;EditProfile
                     </i>
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a href="/logout">
+                  <Link to="/logout">
                     <i className="clr glyphicon glyphicon-off">
                       &nbsp;Logout
                     </i>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

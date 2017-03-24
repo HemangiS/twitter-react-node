@@ -13,6 +13,8 @@ import Profile from './components/profile';
 import YourProfile from './components/yourprofile';
 import Followers from './components/followers';
 import EditProfile from './components/editprofile';
+
+import DeleteTweet from './components/deletetweet';
 // import Header1 from './components/headers/header1';
 
 const routes = (
@@ -27,9 +29,12 @@ const routes = (
     <Route component={App2}>
       <Route path="/welcome/:id" component={Welcome}/>
       <Route path="/profile" component={Profile}/>
-      <Route path="/yourprofile" component={YourProfile}/>
-      <Route path="/followers" component={Followers}/>
-      <Route path="/editprofile" component={EditProfile}/>
+      <Route path="/yourprofile/:id" component={YourProfile}/>
+      <Route path="/followers/:id" component={Followers}/>
+      <Route path="/editprofile/:id" component={EditProfile}/>
+      <Route path="/follow" component={Welcome}/>
+      <Route path="/unfollow" component={Welcome}/>
+      <Route path="/deletetweet/:id" component={DeleteTweet}/>
     </Route>
   </div>
 

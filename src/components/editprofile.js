@@ -1,6 +1,74 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import cookie from 'react-cookie';
+import { browserHistory } from 'react-router';
 
 class EditProfile extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state={
+      data:'',
+      username :'',
+      email :'',
+      mobilenumber:'',
+      user_id: cookie.load('user_id')
+      // password:'',
+
+    }
+    this.onFieldChange = this.onFieldChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+  }
+  componentWillMount() {
+    let user_id = this.props.params.id;
+    axios.get('http://localhost:8000/editprofile/' + user_id)
+    .then(res => {
+      const data= res.data;
+      console.log("-->", res.data)
+      console.log("-->", data.results.username)
+
+      this.setState({
+        data: data,
+        username : data.results.username,
+        email : data.results.email,
+        mobilenumber: data.results.mobilenumber,
+        // password: data.results.password,
+      })
+
+    });
+
+  }
+
+  handleSubmit(e){
+    e.preventDefault();
+    axios.post('http://localhost:8000/editprofile/' + this.state.user_id, {
+      userdata: this.state,
+      user_id: this.state.user_id,
+    })
+    .then(function (response) {
+      console.log(response);
+      browserHistory.push("/welcome/" + this.state.user_id)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
+
+    // this.isValidate();
+  }
+
+  onFieldChange(event){
+    const target = event.target;
+    const name = target.name;
+    this.setState({
+      [name]: event.target.value
+    });
+    console.log("state---->", this.state, name);
+
+  }
+
   render () {
     const style1 = {
       textAlign : 'center'
@@ -11,6 +79,20 @@ class EditProfile extends Component {
     const style3 = {
       margin : '-5px 0px 10px 0px'
     };
+
+    let username;
+    let email;
+    let mobilenumber;
+    let userpic = [];
+    if(this.state.data.results){
+       username = this.state.data.results.username;
+       let loginuserimgsrc = `http://localhost:8000/images/${this.state.data.results.image}`;
+       userpic.push(
+          <img style={{width:'200px', height:'200px'}} key={this.state.data.results.image.length} src={loginuserimgsrc} alt="userpic" height="200px" width="200px" className="thumbnail" />
+       )
+       email = this.state.data.results.email;
+       mobilenumber = this.state.data.results.mobilenumber;
+    }
 
     return (
       <div>
@@ -28,7 +110,7 @@ class EditProfile extends Component {
             <div className="form-horizontal">
               <div className="signin-wrapper">
                 <div style={style2} className="row">
-                  <div className="col-md-4"><img src="./images/" alt="profilepic" width="200px" height="200px" className="thumbnail" />
+                  <div className="col-md-4">{userpic}
                     <form method="post" enctype="multipart/form-data" action="/profilepictureupload">
                       <input type="file" name="thumbnail" className='clr' style={style3} required />
                       <input type="submit" name="submit" className="btn btn-info" />
@@ -39,24 +121,40 @@ class EditProfile extends Component {
                       <div text-align="center" className="form-content"></div>
                       <div className="form-group">
                         <div className="col-sm-8">
-                          <input type="text" name="username" value="data.username" required className="form-control form-control-inline" />
+                          <input
+                            onChange={this.onFieldChange}
+                            value={this.state.username}
+                            type="text"
+                            name="username"
+                            required
+                            className="form-control form-control-inline"
+                          />
                         </div>
                       </div>
                       <div className="form-group">
                         <div className="col-sm-8">
-                          <input type="number" name="mobileno" value="data.mobilenumber" required className="form-control form-control-inline" />
+                          <input
+                            onChange={this.onFieldChange}
+                            value={this.state.mobilenumber}
+                            type="number"
+                            name="mobileno"
+                            required
+                            className="form-control form-control-inline"
+                          />
                         </div>
                       </div>
                       <div className="form-group">
                         <div className="col-sm-8">
-                          <input type="text" name="email" value="data.email" required className="form-control form-control-inline" />
+                          <input
+                            onChange={this.onFieldChange}
+                            value={this.state.email}
+                            type="text"
+                            name="email"
+                            required
+                            className="form-control form-control-inline" />
                         </div>
                       </div>
-                      <div className="form-group">
-                        <div className="col-sm-8">
-                          <input type="password" name="password" value="data.password" required className="form-control form-control-inline" />
-                        </div>
-                      </div>
+
                       <div className="form-group">
                         <div className="col-sm-8">
                           <input type="password" name="confirmpassword" placeholder="new password" className="form-control form-control-inline" />
@@ -64,7 +162,7 @@ class EditProfile extends Component {
                       </div>
                       <div className="form-group">
                         <div className="col-sm-8">
-                          <button type="submit" className="btn btn-info">change profile</button>
+                          <input type="submit" value="change profile" className="btn btn-info" onClick={this.handleSubmit}/>
                         </div>
                       </div>
                     </form>

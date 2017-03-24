@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
 class Login extends Component {
@@ -24,6 +25,7 @@ class Login extends Component {
       // alert(response);
       // return false;
       if (response.data.user_id) {
+        cookie.save('user_id', response.data.user_id);
         browserHistory.push("/welcome/" + response.data.user_id)
       } else {
         browserHistory.push("/login")

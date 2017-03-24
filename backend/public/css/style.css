@@ -1,36 +1,3 @@
-body {
-  font-family: 'Lato', sans-serif;
-}
-
-.right {
-  display: inline;
-  float: right;
-}
-
-.aligncenter {
-  text-align: -webkit-center;
-}
-
-/* form */
-
-/* Checkbox */
-
-.formcheckbox {
-  width: auto;
-  margin-right: 10px;
-}
-.regcheck {
-  padding-bottom: 18px;
-  padding-top: 18px;
-}
-
-/* submit */
-.submit {
-  width: 100%;
-}
-
-
-
 .page-canvas {
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -39,9 +6,6 @@ body {
   margin: auto;
 }
 
-.clr {
-  color : #00aced;
-}
 /* Alert messages */
 .msgalert {
   font-weight: bolder;
@@ -98,11 +62,6 @@ body {
 .profile-sidebar {
   padding: 20px 0 10px 0;
   background: #fff;
-}
-
-.chip {
-  height: 30px;
-  width: 30px;
 }
 
 .profile-userpic img {
@@ -180,7 +139,7 @@ body {
   color: #5b9bd1;
 }
 
-.profile-usermenu ul li .active {
+.profile-usermenu ul li.active {
   border-bottom: none;
 }
 
@@ -193,7 +152,7 @@ body {
 
 /* Profile Content */
 .profile-content {
-  padding: 10px;
+  padding: 20px;
   background: #fff;
   min-height: 460px;
 }
@@ -323,9 +282,8 @@ margin-right: 7px;
 
 }
 
-@media (max-width:768px) {
-
-
+@media (max-width:768px)
+{
 
 .fb-profile-text>h1{
     font-weight: 700;
@@ -425,10 +383,4 @@ margin-right: 7px;
     opacity: 0;
 
 }
-.logo-img{
-  width: 30px;
-  height: 30px;
-  padding-bottom: 3px;
-}
-
 }

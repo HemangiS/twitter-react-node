@@ -1,6 +1,32 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookie';
+import { browserHistory } from 'react-router';
 
 class Profile extends Component {
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state={
+  //     data:'',
+  //     user_id: cookie.load('user_id')
+  //   }
+  //    this.unfollowClick = this.unfollowClick.bind(this);
+  // }
+  // componentWillMount() {
+  //   // let user_id = this.props.params.id;
+  //   axios.get('http://localhost:8000/profile/' + this.state.user_id)
+  //   .then(res => {
+  //     const data= res.data;
+  //     console.log("-->", res.data)
+
+  //     this.setState({
+  //       data: data,
+  //       // user_id: this.state.user_id
+  //     })
+
+  //   });
+
+  // }
 
   render(){
 
