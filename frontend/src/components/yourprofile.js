@@ -17,13 +17,13 @@ class YourProfile extends Component {
     super(props);
     this.state={
       data:'',
-      user_id: cookie.load('user_id')
+
     }
-     this.unfollowClick = this.unfollowClick.bind(this);
+     // this.unfollowClick = this.unfollowClick.bind(this);
   }
   componentWillMount() {
     // let user_id = this.props.params.id;
-    axios.get('http://localhost:8000/yourprofile/' + this.state.user_id)
+    axios.get(`http://localhost:8000/yourprofile/${cookie.load('user_id')}`)
     .then(res => {
       const data= res.data;
       console.log("-->", res.data)
@@ -51,34 +51,34 @@ class YourProfile extends Component {
   //   });
   // }
 
-  unfollowClick(followerId) {
+  // unfollowClick(followerId) {
 
-    axios.post('http://localhost:8000/unfollow', {
-      data: this.state,
-      user_id: this.state.user_id,
-      followerId: followerId,
-    })
-    .then(function (response) {
-      // alert("abcd");
-      // console.log(response);
-      // if (response.data.user_id) {
-        // cookie.save('user_id', response.data.user_id);
+  //   axios.post('http://localhost:8000/unfollow', {
+  //     data: this.state,
+  //     user_id: this.state.user_id,
+  //     followerId: followerId,
+  //   })
+  //   .then(function (response) {
+  //     // alert("abcd");
+  //     // console.log(response);
+  //     // if (response.data.user_id) {
+  //       // cookie.save('user_id', response.data.user_id);
 
-      // } else {
-      //   browserHistory.push("/welcome/" + response.data.user_id)
-      // }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-     browserHistory.push("/welcome/" + this.state.user_id)
-    // browserHistory.push('/welcome');
-  }
+  //     // } else {
+  //     //   browserHistory.push("/welcome/" + response.data.user_id)
+  //     // }
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  //    browserHistory.push("/welcome/" + this.state.user_id)
+  //   // browserHistory.push('/welcome');
+  // }
 
 
   render(){
 
-    let id = this.state.user_id;
+    let id = cookie.load('user_id');
 
     let welcome = `/welcome/${id}`;
     let yourprofile = `/yourprofile/${id}`;
@@ -132,7 +132,7 @@ class YourProfile extends Component {
                 <div>
 
                     <img className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;
-                    <a href="/profile" className="clr media-heading">{this.state.data.tweets[i].username}</a>
+                    <font className="clr media-heading">{this.state.data.tweets[i].username}</font>
                     <div className='right clr'>{tweettime}&nbsp;&nbsp;
 
 
@@ -157,7 +157,7 @@ class YourProfile extends Component {
               <div style={style1} className="page-canvas">
                 <div>
                     <img  className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;
-                    <a href='/profile' className="clr media-heading">{this.state.data.tweets[i].username}</a>
+                    <font className="clr media-heading">{this.state.data.tweets[i].username}</font>
                     <div className='right clr'>{tweettime}&nbsp;&nbsp;
 
                     <a href={deletetweet} name="deletetweetid">
@@ -181,6 +181,7 @@ class YourProfile extends Component {
     if(this.state.data.users) {
       for (var j = 0; j < this.state.data.users.length; j++) {
         let followerId = this.state.data.users[j].user_id;
+        let unfollowsrc = `/unfollow/${followerId}`;
         let followinguserimgsrc = `http://localhost:8000/images/${this.state.data.users[j].image}`;
         following.push(
           <div key={j} className="row">
@@ -189,7 +190,8 @@ class YourProfile extends Component {
               <h6 className="clr">{this.state.data.users[j].username}</h6>
               <form method="post" action="/follower">
                 <input type="hidden" name="followerId" value={followerId} />
-                <input id={followerId} style={{color:'#fff'}} onClick={this.unfollowClick.bind(this, followerId)} type="submit" value="UnFollow" className="clr btn-sm waves-effect waves-light" />
+                <a href={unfollowsrc} className="clr btn btn-sm waves-effect waves-light">UnFollow</a>
+
               </form>
             </div>
           </div>
@@ -224,8 +226,10 @@ class YourProfile extends Component {
 
               <div className="col-sm-6">
                 <div className="profile-content">
-                    <h5 className="clr">{username}'s tweets are here !!!!'</h5>
+                    <h5 className="clr">{username}'s tweets are here !!!!</h5>
+                    <div className="row tweetsinyourprofile">
                       {tweetItem}
+                    </div>
                 </div>
               </div>
 

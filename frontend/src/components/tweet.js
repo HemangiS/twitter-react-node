@@ -10,7 +10,7 @@ class Tweet extends React.Component {
     super(props);
     this.state={
       userdata: '',
-      user_id: cookie.load('user_id')
+
     }
 
   }
@@ -19,17 +19,19 @@ class Tweet extends React.Component {
     // console.log('deletetweetid---->',deletetweetid);
     // console.log('props---->',this.props.params);
 
-    axios.post(`http://localhost:8000/tweet/${id}`)
+    axios.post(`http://localhost:8000/tweet/${id}`, {
+
+    })
     .then(res => {
       // const data= res.data;
       // console.log("-->", res.data)
 
-      this.setState({
-        userdata: data,
-      })
+      // this.setState({
+      //   userdata: data,
+      // })
       // browserHistory.push(`/yourprofile/${this.state.user_id}`);
     });
-    browserHistory.push(`/welcome/${this.state.user_id}`);
+    browserHistory.push(`/welcome/${cookie.load('user_id')}`);
   }
   render() {
 

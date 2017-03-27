@@ -10,19 +10,20 @@ class Welcome extends Component {
     this.state={
       data:'',
       tweet: '',
-      user_id: ''
+
     }
     this.onFieldChange = this.onFieldChange.bind(this);
     this.tweetSubmit = this.tweetSubmit.bind(this);
-    this.followClick = this.followClick.bind(this);
   }
   componentWillMount() {
 
     var coki =  cookie.load('user_id');
     if(coki) {
+    } else {
+      browserHistory.push("/");
+    }
 
-
-      axios.get(`http://localhost:8000/welcome/${coki}`)
+    axios.get(`http://localhost:8000/welcome/${cookie.load('user_id')}`)
       .then(res => {
         const data= res.data;
         console.log("-->", res.data)
@@ -32,45 +33,13 @@ class Welcome extends Component {
         })
 
       });
-    } else {
-      browserHistory.push("/");
-    }
 
-
-
-  }
-
-  followClick(followerId, e) {
-
-    axios.post('http://localhost:8000/follow', {
-      data: this.state,
-      // user_id: this.state.user_id,
-      followerId: followerId,
-    })
-    .then(function (response) {
-      // alert("abcd");
-      // console.log(response);
-      // if (response.data.user_id) {
-        // cookie.save('user_id', response.data.user_id);
-
-      // } else {
-      //   browserHistory.push("/welcome/" + response.data.user_id)
-      // }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-    // this.forceUpdate();
-    // browserHistory.push("/welcome/" + this.state.user_id);
-    // e.preventDefault();
-    // browserHistory.push('/welcome');
   }
 
   tweetSubmit(e) {
-
+    e.preventDefault();
     // let user_id = this.props.params.id;
-    axios.post('http://localhost:8000/tweet/' + this.state.user_id, {
+    axios.post(`http://localhost:8000/tweet/${cookie.load('user_id')}`, {
       userdata: this.state,
     })
     .then(function (response) {
@@ -79,31 +48,12 @@ class Welcome extends Component {
     .catch(function (error) {
       console.log(error);
     });
-    // e.preventDefault();
-    // browserHistory.push('/welcome');
-    browserHistory.push(`/welcome/${this.state.user_id}`);
+
+    window.location.href = `/welcome/${cookie.load('user_id')}`;
   }
 
-  // handleSubmit(e){
-  //   e.preventDefault();
-  //   axios.post('http://localhost:8000/tweet', {
-  //     userdata: this.state,
-  //   })
-  //   .then(function (response) {
-  //     // console.log(response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-  //   browserHistory.push('/login');
-
-
-  //   // this.isValidate();
-  // }
-
   onFieldChange(event){
-    // const target = event.target;
-    // const name = target.name;
+
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -150,7 +100,7 @@ class Welcome extends Component {
             <div key={i} className="row">
               <p></p>
               <div style={{padding:'5px'}} className="page-canvas">
-                <div><img className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;<a href="/pro" className="clr media-heading">{this.state.data.tweets[i].username}</a><div className='right clr'>{tweettime}</div></div>
+                <div><img className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;<font className='clr'>{this.state.data.tweets[i].username}<div className='right'>{tweettime}</div></font></div>
                 <div style={{paddingLeft: '20%'}} className="media-body update-card-body">
                   {this.state.data.tweets[i].tweet}<img src={tweetimg} alt='tweetimage' height="400px" width="400px" className="img-responsive media-object update-card-MDimentions" />
                 </div>
@@ -162,7 +112,7 @@ class Welcome extends Component {
             <div key={i} className="row">
               <p></p>
               <div style={{padding:'5px'}} className="page-canvas">
-                <div><img  className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;<a href="/pro" className="clr media-heading">{this.state.data.tweets[i].username}</a><div className='right clr'>{tweettime}</div></div>
+                <div><img  className="chip img-circle" src={tweetuserimgsrc} alt="Person" />&nbsp;&nbsp;<font className='clr'>{this.state.data.tweets[i].username}<div className='right clr'>{tweettime}</div></font></div>
                 <div style={{paddingLeft: '20%'}} className="media-body update-card-body">
                   {this.state.data.tweets[i].tweet}
                 </div>
@@ -179,6 +129,7 @@ class Welcome extends Component {
       for (var j = 0; j < this.state.data.follow.length; j++) {
         console.log('------>',this.state.data.follow[j].user_id);
         let followerId = this.state.data.follow[j].user_id;
+        let followsrc = `/follow/${followerId}`;
         let followuserimgsrc = `http://localhost:8000/images/${this.state.data.follow[j].image}`;
         users.push(
           <div key={j} className="row">
@@ -187,7 +138,7 @@ class Welcome extends Component {
               <h6 className="clr">{this.state.data.follow[j].username}</h6>
               <form>
                 <input type="hidden" name="followerId" value={followerId} />
-                <input id={followerId} style={{color:'#fff'}} type="submit" value="Follow" onClick={this.followClick.bind(this, followerId)} className="clr btn-sm waves-effect waves-light" />
+                <a href={followsrc} className="clr btn btn-sm waves-effect waves-light">Follow</a>
               </form>
             </div>
           </div>
@@ -267,8 +218,9 @@ class Welcome extends Component {
             </div>
 
 
-
+            <div className='row tweetsinwelcome'>
             {tweetItem}
+            </div>
 
           </div>
         </div>

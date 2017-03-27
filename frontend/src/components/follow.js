@@ -4,12 +4,12 @@ import axios from 'axios';
 import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
-class Followuser extends React.Component {
+class Follow extends React.Component {
 
   constructor(props) {
     super(props);
     this.state={
-      user_id: cookie.load('user_id')
+
     }
 
   }
@@ -18,17 +18,21 @@ class Followuser extends React.Component {
     // console.log('followuserid---->',followuserid);
     // console.log('props---->',this.props.params);
 
-    axios.get(`http://localhost:8000/deletetweet/${followuserid}`)
+    axios.post(`http://localhost:8000/follow/${followuserid}`, {
+      followerId: followuserid,
+      user_id: cookie.load('user_id')
+    })
     .then(res => {
-      const data= res.data;
-      console.log("-->", res.data)
+      // const data= res.data;
+      // console.log("-->", res.data)
 
-      this.setState({
-        data: data,
-      })
+      // this.setState({
+      //   data: data,
+      // })
       // browserHistory.push(`/yourprofile/${this.state.user_id}`);
     });
-    browserHistory.push(`/yourprofile/${this.state.user_id}`);
+    // browserHistory.push(`/welcome/${cookie.load('user_id')}`);
+    window.location.href = `/welcome/${cookie.load('user_id')}`;
   }
   render() {
 
@@ -38,7 +42,7 @@ class Followuser extends React.Component {
       )
   }
 }
-export default Followuser;
+export default Follow;
 
 // import React from 'react';
 // import request from 'superagent';

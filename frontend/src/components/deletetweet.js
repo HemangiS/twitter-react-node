@@ -9,7 +9,7 @@ class DeleteTweet extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      user_id: cookie.load('user_id')
+
     }
 
   }
@@ -28,7 +28,7 @@ class DeleteTweet extends React.Component {
       })
       // browserHistory.push(`/yourprofile/${this.state.user_id}`);
     });
-    browserHistory.push(`/yourprofile/${this.state.user_id}`);
+    browserHistory.push(`/yourprofile/${cookie.load('user_id')}`);
   }
   render() {
 

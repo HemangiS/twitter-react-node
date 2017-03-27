@@ -12,7 +12,7 @@ class EditProfile extends Component {
       username :'',
       email :'',
       mobilenumber:'',
-      user_id: cookie.load('user_id')
+
       // password:'',
 
     }
@@ -42,13 +42,13 @@ class EditProfile extends Component {
 
   handleSubmit(e){
     e.preventDefault();
-    axios.post('http://localhost:8000/editprofile/' + this.state.user_id, {
+    axios.post(`http://localhost:8000/editprofile/${cookie.load('user_id')}`, {
       userdata: this.state,
       user_id: this.state.user_id,
     })
     .then(function (response) {
       console.log(response);
-      browserHistory.push("/welcome/" + this.state.user_id)
+      browserHistory.push(`/welcome/${cookie.load('user_id')}`)
     })
     .catch(function (error) {
       console.log(error);

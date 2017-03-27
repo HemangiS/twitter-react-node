@@ -1,35 +1,37 @@
 import React from 'react';
-import request from 'superagent';
+// import request from 'superagent';
+import axios from 'axios';
 import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
+class UnFollow extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state={
 
-class Followuser extends React.Component {
+    }
+
+  }
   componentWillMount() {
-    let id = this.props.params.id;
-    let url = `http://localhost:5000/follow`;
-    let userLoginDetail = {follower : id, follow : cookie.load('userId'), };
-    var a = JSON.stringify(userLoginDetail);
+    let unfollowuserid = this.props.params.id;
+    // console.log('followuserid---->',followuserid);
+    // console.log('props---->',this.props.params);
 
-    request
-      .post(url)
-      .set('Content-Type', 'application/json')
-      .send(a)
-      .end(function(err, response){
-        console.log(response.text);
-        var a = JSON.parse(response.text);
+    axios.post(`http://localhost:8000/unfollow/${unfollowuserid}`,{
+      followerId: unfollowuserid,
+    })
+    .then(res => {
+      // const data= res.data;
+      // console.log("-->", res.data)
 
-        if(a.status === 0) {
-          alert(a.data);
-        } else {
-
-        }
-
-        browserHistory.push('/follow');
-
-
-     });
+      // this.setState({
+      //   data: data,
+      // })
+      // browserHistory.push(`/yourprofile/${this.state.user_id}`);
+    });
+    // browserHistory.push(`/yourprofile/${cookie.load('user_id')}`);
+    window.location.href = `/yourprofile/${cookie.load('user_id')}`;
   }
   render() {
 
@@ -39,4 +41,4 @@ class Followuser extends React.Component {
       )
   }
 }
-export default Followuser;
+export default UnFollow;

@@ -26,7 +26,7 @@ class Login extends Component {
       // return false;
       if (response.data.user_id) {
         cookie.save('user_id', response.data.user_id);
-        browserHistory.push("/welcome/" + response.data.user_id)
+        browserHistory.push(`/welcome/${cookie.load('user_id')}`)
       } else {
         browserHistory.push("/login")
       }

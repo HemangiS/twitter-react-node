@@ -583,7 +583,7 @@ router.get('/editprofile/:id', (req, res, next) => {
   }
 });
 
-router.post('/follow', (req, res, next) => {
+router.post('/follow/:id', (req, res, next) => {
 
 // console.log("callledd", req.body.data.data);
   var a = {"msg":""};
@@ -595,6 +595,7 @@ router.post('/follow', (req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   const id = req.body.followerId;
   console.log('followerid--->', id );
+  console.log('user_id--->', user_id );
   // const id = req.body.followerId;
   // const session = req.session;
   const query = DB.builder()
@@ -626,7 +627,7 @@ router.post('/follow', (req, res, next) => {
   });
 });
 
-router.post('/unfollow', (req, res, next) => {
+router.post('/unfollow/:id', (req, res, next) => {
   console.log("----api Unfollow called");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -636,7 +637,7 @@ router.post('/unfollow', (req, res, next) => {
   const query = DB.builder()
   .delete()
   .from('follower')
-  .where('id = ?', id)
+  .where('follower_id = ?', id)
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {

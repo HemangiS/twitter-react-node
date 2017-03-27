@@ -15,6 +15,8 @@ import Profile from './components/profile';
 import YourProfile from './components/yourprofile';
 import Followers from './components/followers';
 import EditProfile from './components/editprofile';
+import UnFollow from './components/unfollow';
+import Follow from './components/follow';
 
 import DeleteTweet from './components/deletetweet';
 // import Header1 from './components/headers/header1';
@@ -36,8 +38,8 @@ const routes = (
       <Route path="/yourprofile/:id" component={YourProfile}/>
       <Route path="/followers/:id" component={Followers}/>
       <Route path="/editprofile/:id" component={EditProfile}/>
-      <Route path="/follow" component={Welcome}/>
-      <Route path="/unfollow" component={Welcome}/>
+      <Route path="/follow/:id" component={Follow}/>
+      <Route path="/unfollow/:id" component={UnFollow}/>
       <Route path="/deletetweet/:id" component={DeleteTweet}/>
     </Route>
   </div>

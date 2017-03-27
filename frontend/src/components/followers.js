@@ -8,9 +8,9 @@ class Followers extends Component {
     super(props);
     this.state={
       data:'',
-      user_id: cookie.load('user_id')
+
     }
-    this.unfollowClick = this.unfollowClick.bind(this);
+    // this.unfollowClick = this.unfollowClick.bind(this);
   }
   componentWillMount() {
     let user_id = this.props.params.id;
@@ -29,7 +29,7 @@ class Followers extends Component {
 
   render(){
 
-    let id = this.state.user_id;
+    let id = cookie.load('user_id');
 
     let welcome = `/welcome/${id}`;
     let yourprofile = `/yourprofile/${id}`;
@@ -70,15 +70,18 @@ class Followers extends Component {
 
 
     let followerItem = [];
-    if(this.state.data.users) {
+    if(followercount != '0') {
       for (var i = 0; i < this.state.data.users.length; i++) {
+        let followerId = this.state.data.users[i].user_id;
+        let unfollowsrc = `/unfollow/${followerId}`;
         let followinguserimgsrc = `http://localhost:8000/images/${this.state.data.users[i].image}`;
         followerItem.push(
           <div key={i} style={{paddingBottom: '25px'}} className="aligncenter col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12"><img src={followinguserimgsrc} alt="followerpic" height="140" width="140" className="img-circle" /><a href="/profile/">
               <h2 style={{fontSize: '15px'}} className="clr">{this.state.data.users[i].username}</h2></a>
             <form method="post" action="/unfollow">
               <input type="hidden" name="followerId" value={this.state.data.users[i].user_id} />
-              <input style={{color : '#fff'}} type="submit" value="Unfollow" className="clr btn-sm waves-effect waves-light" />
+              <a href={unfollowsrc} className="clr btn btn-sm waves-effect waves-light">UnFollow</a>
+
             </form>
           </div>
         )
@@ -86,6 +89,8 @@ class Followers extends Component {
     } else {
       followerItem.push(
         <div style={style4} className="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12">
+            <p></p>
+            <p></p>
             <p>You have no followers</p>
         </div>
       )
