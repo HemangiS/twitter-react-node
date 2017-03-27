@@ -1,10 +1,10 @@
 FROM node:6-alpine
 
-RUN mkdir -p /twitter-clone-3
+RUN mkdir -p /backend
 
-ADD ./package.json /twitter-clone-3/package.json
+ADD ./package.json /backend/package.json
 
-WORKDIR /twitter-clone-3/
+WORKDIR /backend/
 RUN npm install --production -q
 
-ADD ./ /twitter-clone-3/
+ADD ./ /backend/

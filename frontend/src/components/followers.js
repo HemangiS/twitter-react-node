@@ -10,7 +10,7 @@ class Followers extends Component {
       data:'',
       user_id: cookie.load('user_id')
     }
-
+    this.unfollowClick = this.unfollowClick.bind(this);
   }
   componentWillMount() {
     let user_id = this.props.params.id;

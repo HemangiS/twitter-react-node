@@ -16,9 +16,9 @@ class Header2 extends Component {
 
   }
 
-  componentWillMount() {
-    this.setState({user_id: cookie.load('user_id')});
-  }
+  // componentWillMount() {
+  //   this.setState({user_id: cookie.load('user_id')});
+  // }
 
   render(){
 
@@ -28,12 +28,13 @@ class Header2 extends Component {
       paddingBottom: '3px'
     }
 
-    let id = this.state.user_id;
+    let id = cookie.load('user_id');
 
     let welcome = `/welcome/${id}`;
     let yourprofile = `/yourprofile/${id}`;
     let followers = `/followers/${id}`;
     let editprofile = `/editprofile/${id}`;
+    let logout = `/logout`;
 
     return(
       <div>
@@ -84,7 +85,7 @@ class Header2 extends Component {
                 </li>
 
                 <li>
-                  <Link to="/logout">
+                  <Link to={logout}>
                     <i className="clr glyphicon glyphicon-off">
                       &nbsp;Logout
                     </i>

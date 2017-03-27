@@ -10,7 +10,7 @@ class Welcome extends Component {
     this.state={
       data:'',
       tweet: '',
-      user_id: cookie.load('user_id')
+      user_id: ''
     }
     this.onFieldChange = this.onFieldChange.bind(this);
     this.tweetSubmit = this.tweetSubmit.bind(this);
@@ -18,16 +18,25 @@ class Welcome extends Component {
   }
   componentWillMount() {
 
-    axios.get(`http://localhost:8000/welcome/${this.state.user_id}`)
-    .then(res => {
-      const data= res.data;
-      console.log("-->", res.data)
+    var coki =  cookie.load('user_id');
+    if(coki) {
 
-      this.setState({
-        data: data,
-      })
 
-    });
+      axios.get(`http://localhost:8000/welcome/${coki}`)
+      .then(res => {
+        const data= res.data;
+        console.log("-->", res.data)
+
+        this.setState({
+          data: data,
+        })
+
+      });
+    } else {
+      browserHistory.push("/");
+    }
+
+
 
   }
 
@@ -35,7 +44,7 @@ class Welcome extends Component {
 
     axios.post('http://localhost:8000/follow', {
       data: this.state,
-      user_id: this.state.user_id,
+      // user_id: this.state.user_id,
       followerId: followerId,
     })
     .then(function (response) {
@@ -59,7 +68,7 @@ class Welcome extends Component {
   }
 
   tweetSubmit(e) {
-    // e.preventDefault();
+
     // let user_id = this.props.params.id;
     axios.post('http://localhost:8000/tweet/' + this.state.user_id, {
       userdata: this.state,
@@ -70,7 +79,9 @@ class Welcome extends Component {
     .catch(function (error) {
       console.log(error);
     });
+    // e.preventDefault();
     // browserHistory.push('/welcome');
+    browserHistory.push(`/welcome/${this.state.user_id}`);
   }
 
   // handleSubmit(e){
@@ -102,7 +113,7 @@ class Welcome extends Component {
 
   render(){
 
-    let id = this.state.user_id;
+    let id = cookie.load('user_id');
 
     let welcome = `/welcome/${id}`;
     let yourprofile = `/yourprofile/${id}`;

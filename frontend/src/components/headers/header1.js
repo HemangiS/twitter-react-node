@@ -50,7 +50,7 @@ class Header1 extends Component {
                   </a>
                 </li>
                 <li>
-                  <a href="/twitter.com/about">
+                  <a href="/about">
                     <i className="clr glyphicon glyphicon-search">
                       &nbsp;About us
                     </i>

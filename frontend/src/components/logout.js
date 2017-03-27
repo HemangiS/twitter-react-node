@@ -4,9 +4,9 @@ import { browserHistory } from 'react-router';
 
 class Logout extends React.Component {
   render() {
-    var a = cookie.load('userId');
+    var a = cookie.load('user_id');
     if(a > 0 ) {
-      cookie.remove('userId', { path: '/' });
+      cookie.remove('user_id', { path: '/' });
       browserHistory.push('/');
     } else {
       browserHistory.push('/');

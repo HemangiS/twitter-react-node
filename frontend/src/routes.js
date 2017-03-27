@@ -6,7 +6,9 @@ import App2 from './components/App2';
 
 import Index1 from './components/index1';
 import Login from './components/login';
+import Logout from './components/logout';
 import Register from './components/register';
+import About from './components/about';
 
 import Welcome from './components/welcome';
 import Profile from './components/profile';
@@ -23,6 +25,8 @@ const routes = (
       <Route path="/" component={Index1}/>
       <Route path="/register" component={Register}/>
       <Route path="/login" component={Login}/>
+      <Route path="/logout" component={Logout}/>
+      <Route path="/about" component={About}/>
 
     </Route>
 

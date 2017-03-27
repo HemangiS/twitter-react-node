@@ -14,7 +14,9 @@ class DeleteTweet extends React.Component {
 
   }
   componentWillMount() {
-    let deletetweetid = this.props.params.deletetweetid;
+    let deletetweetid = this.props.params.id;
+    // console.log('deletetweetid---->',deletetweetid);
+    // console.log('props---->',this.props.params);
 
     axios.get(`http://localhost:8000/deletetweet/${deletetweetid}`)
     .then(res => {
@@ -24,9 +26,9 @@ class DeleteTweet extends React.Component {
       this.setState({
         data: data,
       })
-      browserHistory.push(`/yourprofile/${this.state.user_id}`);
+      // browserHistory.push(`/yourprofile/${this.state.user_id}`);
     });
-
+    browserHistory.push(`/yourprofile/${this.state.user_id}`);
   }
   render() {
 

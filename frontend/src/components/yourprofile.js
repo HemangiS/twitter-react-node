@@ -37,6 +37,20 @@ class YourProfile extends Component {
 
   }
 
+  // componentWillReceiveProps() {
+  //   let deletetweetid = this.props.params.id;
+  //   axios.get(`http://localhost:8000/deletetweet/${deletetweetid}`)
+  //   .then(res => {
+  //     const data= res.data;
+  //     console.log("-->", res.data)
+
+  //     this.setState({
+  //       data: data,
+  //     })
+  //     // browserHistory.push(`/yourprofile/${this.state.user_id}`);
+  //   });
+  // }
+
   unfollowClick(followerId) {
 
     axios.post('http://localhost:8000/unfollow', {
@@ -61,18 +75,6 @@ class YourProfile extends Component {
     // browserHistory.push('/welcome');
   }
 
-  // tweetdelete(deletetweetid) {
-  //   axios.get('http://localhost:8000/deletetweet/'+deletetweetid, {
-
-  //   })
-  //   .then(function (response) {
-  //     // body...
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-  //   browserHistory.push('/yourprofile/'+this.state.user_id);
-  // }
 
   render(){
 
