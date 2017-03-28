@@ -31,8 +31,7 @@ class Header2 extends Component {
     let id = cookie.load('user_id');
 
     let welcome = `/welcome/${id}`;
-    let yourprofile = `/yourprofile/${id}`;
-    let followers = `/followers/${id}`;
+
     let editprofile = `/editprofile/${id}`;
     let logout = `/logout`;
 
@@ -52,46 +51,45 @@ class Header2 extends Component {
             </div>
 
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
               <ul className="nav navbar-nav navbar-right">
+
                 <li>
 
                   <Link to={welcome}>
-                    <i className="clr glyphicon glyphicon-home">
-                      &nbsp;Home
-                    </i>
-                  </Link>
-                </li>
-                <li>
-                  <Link to={yourprofile}>
-                    <i className="clr glyphicon glyphicon-edit">
-                      &nbsp;Profile
-                    </i>
+                    <font className='clr'>
+                      <i className="glyphicon glyphicon-home">
+                        &nbsp;
+                      </i>
+                      Home
+                    </font>
                   </Link>
                 </li>
 
                 <li>
-                  <Link to={followers}>
-                    <i className="clr glyphicon glyphicon-user">
-                      &nbsp;Followers
-                    </i>
-                  </Link>
-                </li>
-                <li>
                   <Link to={editprofile}>
-                    <i className="clr glyphicon glyphicon-pencil">
-                      &nbsp;EditProfile
-                    </i>
+                    <font className='clr'>
+                      <i className="clr glyphicon glyphicon-pencil">
+                        &nbsp;
+                      </i>
+                      EditProfile
+                    </font>
                   </Link>
                 </li>
 
                 <li>
                   <Link to={logout}>
-                    <i className="clr glyphicon glyphicon-off">
-                      &nbsp;Logout
-                    </i>
+                    <font className='clr'>
+                      <i className="clr glyphicon glyphicon-off">
+                        &nbsp;
+                      </i>
+                      Logout
+                    </font>
                   </Link>
                 </li>
+
               </ul>
+
             </div>
 
           </div>

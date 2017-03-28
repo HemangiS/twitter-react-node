@@ -133,11 +133,26 @@ router.get('/followers/:id', (req, res) => {
             next(errorusers);
             return;
           }
+          query = DB.builder()
+          .select()
+          .field('id')
+          .from('tweet', 't')
+          .join(DB.builder()
+          .select()
+          .from('users'), 'u', 't.userid = u.user_id')
+          .where('user_id = ?', user_id)
+          .order('time', false)
+          .toParam();
+          DB.executeQuery(query, (errorusers, tweets) => {
+            if (errorusers) {
+              next(errorusers);
+              return;
+            }
           let object={
             count: c.rows.length,
             users: users.rows,
             results: results.rows[0],
-
+            tweets: tweets.rows.length,
           }
           console.log(object)
           res.end( JSON.stringify(object));
@@ -146,6 +161,7 @@ router.get('/followers/:id', (req, res) => {
           //
           //   results: results.rows,
           // });
+          });
         });
       });
     });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookie';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 class Welcome extends Component {
 
@@ -9,7 +9,7 @@ class Welcome extends Component {
     super(props);
     this.state={
       data:'',
-      tweet: '',
+      tweet: ''
 
     }
     this.onFieldChange = this.onFieldChange.bind(this);
@@ -17,13 +17,9 @@ class Welcome extends Component {
   }
   componentWillMount() {
 
-    var coki =  cookie.load('user_id');
-    if(coki) {
-    } else {
-      browserHistory.push("/");
-    }
+    let user_id = this.props.params.id;
 
-    axios.get(`http://localhost:8000/welcome/${cookie.load('user_id')}`)
+    axios.get(`http://localhost:8000/welcome/${user_id}`)
       .then(res => {
         const data= res.data;
         console.log("-->", res.data)
@@ -138,7 +134,7 @@ class Welcome extends Component {
               <h6 className="clr">{this.state.data.follow[j].username}</h6>
               <form>
                 <input type="hidden" name="followerId" value={followerId} />
-                <a href={followsrc} className="clr btn btn-sm waves-effect waves-light">Follow</a>
+                <a href={followsrc} className="clrbtn btn-info btn btn-sm waves-effect waves-light">Follow</a>
               </form>
             </div>
           </div>
@@ -160,7 +156,7 @@ class Welcome extends Component {
     return(
       <div className="container">
 
-        <div className="col-sm-3">
+        <div className="col-sm-3 col-xs-12 col-md-3">
           <div style={style3} className="page-canvas">
             <div className="profile-sidebar">
               <div className="profile-userpic">{userpic}</div>
@@ -170,7 +166,7 @@ class Welcome extends Component {
             </div>
             <div className="profile-usermenu">
               <ul className="nav">
-                <li className="active"><a href={welcome}><i className="clr glyphicon glyphicon-home"></i>   home</a></li>
+                <li className="active"><a href={welcome}><i className="clr glyphicon glyphicon-home"></i>   Home</a></li>
                 <li><a href={yourprofile}><i className="clr glyphicon glyphicon-user"></i>   Profile</a></li>
                 <li><a href={editprofile}><i className="clr glyphicon glyphicon-pencil"></i>   Edit Profile</a></li>
                 <li><a href={followers}><i className="clr glyphicon glyphicon-ok"></i>   followers<span style={style} className="right clr badge">{followercount}</span></a></li>
@@ -179,7 +175,7 @@ class Welcome extends Component {
           </div>
         </div>
 
-        <div className="col-sm-6">
+        <div className="col-sm-6 col-xs-12 col-md-6">
           <div className="profile-content">
 
             <div className="row">
@@ -205,7 +201,7 @@ class Welcome extends Component {
                             type="submit"
                             value="Tweet"
                             name="Tweet"
-                            className="clr btn-sm waves-effect waves-light" />
+                            className="clrbtn btn-info btn btn-sm waves-effect waves-light" />
                         </div>
                         <div className="col-sm-7">
                           <input type="file" name="imagetweet" className="btn-sm waves-effect waves-light" />
@@ -225,7 +221,7 @@ class Welcome extends Component {
           </div>
         </div>
 
-        <div className="col-sm-3">
+        <div className="col-sm-3 col-xs-12 col-md-3">
           <div className="profile-content">
             <div className="sidebar-menu">
               <p className="clr"><i className="glyphicon glyphicon-user">&nbsp;</i>People you may know</p>

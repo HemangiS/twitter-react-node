@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookie';
-import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 // const Trash = ({onClick}) => {
 //   return (
@@ -95,9 +96,13 @@ class YourProfile extends Component {
 
 
     let username;
+    let email;
+    let phone;
     let userpic = [];
     if(this.state.data.results){
        username = this.state.data.results.username;
+       email = this.state.data.results.email;
+       phone = this.state.data.results.mobilenumber;
        let loginuserimgsrc = `http://localhost:8000/images/${this.state.data.results.image}`;
        userpic.push(
           <img style={{align:'left'}} key={this.state.data.results.image.length} src={loginuserimgsrc} alt="userpic" height="200px" width="200px" className="fb-image-profile thumbnail img-responsive" />
@@ -111,6 +116,11 @@ class YourProfile extends Component {
       followercount = 0;
     }
 
+    let tweetcount = 0;
+    if(this.state.data.tweets) {
+      tweetcount = this.state.data.tweets.length;
+    }
+
     let tweetItem = [];
     if(this.state.data.tweets) {
       for (var i = 0; i < this.state.data.tweets.length; i++) {
@@ -120,7 +130,7 @@ class YourProfile extends Component {
         console.log(tweettime);
         let tweetuserimgsrc = `http://localhost:8000/images/${this.state.data.tweets[i].image}`;
         let tweetimg = '';
-        let profilesrc = `/profile/${this.state.data.tweets[i].user_id}`;
+        // let profilesrc = `/profile/${this.state.data.tweets[i].user_id}`;
         let deletetweetid = this.state.data.tweets[i].id;
         let deletetweet = `/deletetweet/${deletetweetid}`;
         if(this.state.data.tweets[i].imagetweet) {
@@ -190,7 +200,7 @@ class YourProfile extends Component {
               <h6 className="clr">{this.state.data.users[j].username}</h6>
               <form method="post" action="/follower">
                 <input type="hidden" name="followerId" value={followerId} />
-                <a href={unfollowsrc} className="clr btn btn-sm waves-effect waves-light">UnFollow</a>
+                <a href={unfollowsrc} className="clrbtn btn btn-info btn-sm waves-effect waves-light">UnFollow</a>
 
               </form>
             </div>
@@ -202,29 +212,67 @@ class YourProfile extends Component {
     return(
       <div className="container">
 
-        <div className="fb-profile">
+        <div className="navbar navbar-default container-fluid mynav">
+
 
           <img src="/images/cover.jpg" alt="cover" width="100%" className="fb-image-lg"/>
+
+
+
+              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
+                <span className="sr-only">Toggle navigation</span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+              </button>
+
+
+            <ul className="myul collapse navbar-collapse nav navbar-nav navbar-right" id="bs-example-navbar-collapse-2">
+
+              <li>
+                <Link to={yourprofile} className='myactive'>
+
+                    &nbsp;Tweets&nbsp;<span className="badge">{tweetcount}</span>
+
+                </Link>
+              </li>
+
+              <li>
+                <Link to={followers}>
+
+                    &nbsp;Followers&nbsp;<span className="badge">{followercount}</span>
+
+                </Link>
+              </li>
+
+              <li>
+                <Link to={welcome} className='usernamestyle'>
+
+                    Welcome&nbsp;{username}
+
+                </Link>
+              </li>
+
+            </ul>
+
+
+
           {userpic}
-          <div className="fb-profile-text">
-            <h1 className="clr">{username}</h1>
-          </div>
 
-
+          <p></p>
           <div style={style1} className="row page-canvas">
 
-              <div className="col-sm-3">
+              <div className="col-sm-3 col-xs-4">
                 <div className="profile-usermenu">
-                  <ul className="nav">
-                    <li><a href={welcome}><i className="clr glyphicon glyphicon-home"></i>   home</a></li>
-                    <li className="active"><a href={yourprofile}><i className="clr glyphicon glyphicon-user"></i>   Profile</a></li>
-                    <li><a href={editprofile}><i className="clr glyphicon glyphicon-pencil"></i>   Edit Profile</a></li>
-                    <li><a href={followers}><i className="clr glyphicon glyphicon-ok"></i>   followers<span style={style} className="right clr badge">{followercount}</span></a></li>
+                  <ul className="nav nav1">
+                    <li><i className="clr glyphicon glyphicon-user"></i>   {username}</li>
+                    <li><i className="clr glyphicon glyphicon-envelope"></i>   {email}</li>
+                    <li><i className="clr glyphicon glyphicon-phone"></i>   {phone}</li>
                   </ul>
                 </div>
               </div>
 
-              <div className="col-sm-6">
+              <div className="col-sm-6 col-xs-7">
                 <div className="profile-content">
                     <h5 className="clr">{username}'s tweets are here !!!!</h5>
                     <div className="row tweetsinyourprofile">
@@ -233,7 +281,7 @@ class YourProfile extends Component {
                 </div>
               </div>
 
-              <div className="col-sm-3">
+              <div className="col-sm-3 col-xs-4">
                 <div className="profile-content">
                   <div className="sidebar-menu">
                     <h5 className="clr"><i className="clr glyphicon glyphicon-user"></i> Your followers!!!!</h5>
@@ -241,7 +289,6 @@ class YourProfile extends Component {
                   </div>
                 </div>
               </div>
-
 
           </div>
 

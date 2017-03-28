@@ -80,9 +80,9 @@ class EditProfile extends Component {
       margin : '-5px 0px 10px 0px'
     };
 
-    let username;
-    let email;
-    let mobilenumber;
+    let username = '';
+    let email = '';
+    let mobilenumber = '';
     let userpic = [];
     if(this.state.data.results){
        username = this.state.data.results.username;

@@ -2,7 +2,7 @@ import React from 'react';
 // import request from 'superagent';
 import axios from 'axios';
 import cookie from 'react-cookie';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 class Follow extends React.Component {
 

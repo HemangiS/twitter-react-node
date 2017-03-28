@@ -28,33 +28,41 @@ class Header1 extends Component {
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="/">
-                    <i className="clr glyphicon glyphicon-home">
-                      &nbsp;Home
-                    </i>
-                  </a>
+                  <font className='clr'>
+                    <a href="/">
+                      <i className=" glyphicon glyphicon-home">
+                        &nbsp;Home
+                      </i>
+                    </a>
+                  </font>
                 </li>
                 <li>
-                  <a href="/register">
-                    <i className="clr glyphicon glyphicon-edit">
-                      &nbsp;Register
-                    </i>
-                  </a>
+                  <font className='clr'>
+                    <a href="/register">
+                      <i className=" glyphicon glyphicon-edit">
+                        &nbsp;Register
+                      </i>
+                    </a>
+                  </font>
                 </li>
 
                 <li>
-                  <a href="/login">
-                    <i className="clr glyphicon glyphicon-user">
-                      &nbsp;LogIn
-                    </i>
-                  </a>
+                  <font className='clr'>
+                    <a href="/login">
+                      <i className=" glyphicon glyphicon-user">
+                        &nbsp;LogIn
+                      </i>
+                    </a>
+                  </font>
                 </li>
                 <li>
-                  <a href="/about">
-                    <i className="clr glyphicon glyphicon-search">
-                      &nbsp;About us
-                    </i>
-                  </a>
+                  <font className='clr'>
+                    <a href="/about">
+                      <i className=" glyphicon glyphicon-search">
+                        &nbsp;About us
+                      </i>
+                    </a>
+                  </font>
                 </li>
               </ul>
             </div>

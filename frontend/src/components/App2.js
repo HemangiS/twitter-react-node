@@ -14,7 +14,7 @@ class App2 extends Component {
 
   render(){
     return(
-      <div className="container col-sm-12">
+      <div className="container fb-profile col-sm-12">
         <div className="page-canvas">
           <Header2 />
           {this.props.children}

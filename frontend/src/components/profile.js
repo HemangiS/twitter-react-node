@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import cookie from 'react-cookie';
-import { browserHistory } from 'react-router';
+// import cookie from 'react-cookie';
+// import { browserHistory } from 'react-router';
 
 class Profile extends Component {
 

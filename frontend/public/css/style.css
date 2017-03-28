@@ -2,6 +2,38 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+.usernamestyle {
+  border-bottom: solid 3px #CA461A;
+  color: #CA461A !important;
+  font-weight: bolder;
+}
+
+.clrbtn {
+  background-color: #00aced;
+}
+
+.myul {
+  margin: 0;
+  padding: 0;
+}
+
+.myul a:hover {
+  border-bottom: solid 1px #00aced;
+}
+
+.myactive {
+  border-bottom: solid 3px #00aced;
+}
+
+.badge {
+  background-color: #00aced;
+}
+
+.mynav {
+  background: none;
+  border: none;
+}
+
 /* In welcome page */
 .tweetsinwelcome {
   padding: 0 25px;
@@ -173,7 +205,15 @@ body {
 .profile-usermenu {
   margin-top: 30px;
 }
-
+.nav1 li {
+  font-size: 14px;
+  font-weight: 400;
+  padding: 10px 0;
+}
+.nav1 li i {
+  margin-right: 8px;
+  font-size: 14px;
+}
 .profile-usermenu ul li {
   border-bottom: 1px solid #f0f4f7;
 }
@@ -330,7 +370,7 @@ margin-right: 7px;
 .fb-profile img.fb-image-lg{
     z-index: 0;
     width: 100%;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 
 .fb-image-profile
@@ -367,18 +407,19 @@ margin-right: 7px;
 
 }
 
-@media (max-width:400px) {
+@media (max-width:790px) {
+.fb-profile {
+  width: 780px;
+}
+}
+@media (max-width:768px) {
 
-.tweetsinwelcome, .tweetsinyourprofile {
+.tweetsinyourprofile {
   padding: 0 25px;
-  height: 280px;
+  height: 320px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-
-}
-
-@media (max-width:768px) {
 
 .fb-profile-text>h1{
     font-weight: 700;
