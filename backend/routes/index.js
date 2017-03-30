@@ -13,73 +13,73 @@ const upload = multer({ dest: path.resolve(__dirname, '../public/images/') });
 
 router.get('/profile/:id', (req, res, next) => {
   const profileid = req.params.id;
-  const session = req.session;
-  const user_id = req.body.user_id;
+  // const session = req.session;
+  const userId = req.body.user_id;
   let query;
-  if(user_id) {
+  if (userId) {
     // if (profileid == user_id) {
     //   res.redirect('/profilechange');
     // } else {
+    query = DB.builder()
+    .select()
+    .from('users')
+    .where('user_id = ?', profileid)
+    .toParam();
+    DB.executeQuery(query, (error, profile) => {
+      if (error) {
+        next(error);
+        return;
+      }
       query = DB.builder()
       .select()
-      .from('users')
+      .field('tweet')
+      .field('time')
+      .field('username')
+      .field('image')
+      .field('imagetweet')
+      .field('user_id')
+      .field('id')
+      .from('tweet', 't')
+      .join(DB.builder()
+      .select()
+      .from('users'), 'u', 't.userid = u.user_id')
       .where('user_id = ?', profileid)
+      .order('time', false)
       .toParam();
-      DB.executeQuery(query, (error, profile) => {
-        if (error) {
-          next(error);
+      DB.executeQuery(query, (errorusers, tweets) => {
+        if (errorusers) {
+          next(errorusers);
           return;
         }
         query = DB.builder()
-          .select()
-          .field('tweet')
-          .field('time')
-          .field('username')
-          .field('image')
-          .field('imagetweet')
-          .field('user_id')
-          .field('id')
-          .from('tweet', 't')
-          .join(DB.builder()
-          .select()
-          .from('users'), 'u', 't.userid = u.user_id')
-          .where('user_id = ?', profileid)
-          .order('time', false)
-          .toParam();
-          DB.executeQuery(query, (errorusers, tweets) => {
-            if (errorusers) {
-              next(errorusers);
-              return;
-            }
-            query = DB.builder()
-            .select()
-            .from('follower')
-            .where('login_user_id = ?', profileid)
-            .toParam();
-            DB.executeQuery(query, (errorusers, c) => {
-              if (errorusers) {
-                next(errorusers);
-                return;
-              }
-              let object= {
-               profile: profile.rows[0],
-                count: c.rows.length,
-                tweets: tweets.rows,
-              }
+        .select()
+        .from('follower')
+        .where('login_user_id = ?', profileid)
+        .toParam();
+        DB.executeQuery(query, (errortweets, c) => {
+          if (errortweets) {
+            next(errortweets);
+            return;
+          }
+          const object = {
+            profile: profile.rows[0],
+            count: c.rows.length,
+            tweets: tweets.rows,
+          };
 
-              res.end( JSON.stringify(object));
+          res.end(JSON.stringify(object));
 
-              // console.log(object)
-              //  res.end( JSON.stringify(object));
-              // res.render('profile', {
-              //   profile: profile.rows[0],
-              //   count: c.rows.length,
-              //   tweets: tweets.rows,
-              // });
-            });
-          });
+          // console.log(object)
+          //  res.end( JSON.stringify(object));
+          // res.render('profile', {
+          //   profile: profile.rows[0],
+          //   count: c.rows.length,
+          //   tweets: tweets.rows,
+          // });
+        });
       });
-    // }
+    });
+  // }
   } else {
     // res.redirect('/login');
   }
@@ -87,22 +87,22 @@ router.get('/profile/:id', (req, res, next) => {
 
 router.get('/followers/:id', (req, res) => {
   // const session = req.session;
-  user_id = req.params.id;
-  console.log("----apifollowers");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  const userId = req.params.id;
+  console.log('----apifollowers');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   let query;
-  if (user_id) {
+  if (userId) {
     query = DB.builder()
     .select()
     .from('users')
-    .where('user_id = ?', user_id)
+    .where('user_id = ?', userId)
     .toParam();
     DB.executeQuery(query, (error, results) => {
       if (error) {
-        next(error);
+        console.log(error);
         return;
       }
       query = DB.builder()
@@ -116,21 +116,21 @@ router.get('/followers/:id', (req, res) => {
       .join(DB.builder()
       .select()
       .from('follower'), 'f', 'r.user_id = f.follower_id')
-      .where('login_user_id = ?', user_id)
+      .where('login_user_id = ?', userId)
       .toParam();
       DB.executeQuery(query, (errorresults, users) => {
         if (errorresults) {
-          next(errorresults);
+          console.log(errorresults);
           return;
         }
         query = DB.builder()
         .select()
         .from('follower')
-        .where('login_user_id = ?', user_id)
+        .where('login_user_id = ?', userId)
         .toParam();
         DB.executeQuery(query, (errorusers, c) => {
           if (errorusers) {
-            next(errorusers);
+            console.log(errorusers);
             return;
           }
           query = DB.builder()
@@ -140,22 +140,22 @@ router.get('/followers/:id', (req, res) => {
           .join(DB.builder()
           .select()
           .from('users'), 'u', 't.userid = u.user_id')
-          .where('user_id = ?', user_id)
+          .where('user_id = ?', userId)
           .order('time', false)
           .toParam();
-          DB.executeQuery(query, (errorusers, tweets) => {
-            if (errorusers) {
-              next(errorusers);
+          DB.executeQuery(query, (errorc, tweets) => {
+            if (errorc) {
+              console.log(errorc);
               return;
             }
-          let object={
-            count: c.rows.length,
-            users: users.rows,
-            results: results.rows[0],
-            tweets: tweets.rows.length,
-          }
-          console.log(object)
-          res.end( JSON.stringify(object));
+            const object = {
+              count: c.rows.length,
+              users: users.rows,
+              results: results.rows[0],
+              tweets: tweets.rows,
+            };
+            console.log(object);
+            res.end(JSON.stringify(object));
           // res.render('followers', {
           //   count: c.rows.length,
           //
@@ -171,11 +171,11 @@ router.get('/followers/:id', (req, res) => {
 });
 
 router.post('/login', (req, res, next) => {
-  console.log("----apilogin");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  console.log('----apilogin');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const email = req.body.userdata.email;
   const password = req.body.userdata.password;
@@ -198,45 +198,45 @@ router.post('/login', (req, res, next) => {
   //     errors,
   //   });
   // } else {
-    query = DB.builder()
-    .select()
-    .from('users')
-    .where('email = ?', email)
-    .toParam();
-    DB.executeQuery(query, (error, results) => {
-      if (error) {
-        next(error);
-        return;
-      }
+  query = DB.builder()
+  .select()
+  .from('users')
+  .where('email = ?', email)
+  .toParam();
+  DB.executeQuery(query, (error, results) => {
+    if (error) {
+      next(error);
+      return;
+    }
 
-      if (results.rowCount) {
-        query = DB.builder()
-        .select()
-        .from('users')
-        .where('email = ?', email)
-        .where('password = ?', password)
-        .toParam();
-        DB.executeQuery(query, (err, results1) => {
-          if (err) {
-            next(err);
-            return;
-          }
+    if (results.rowCount) {
+      query = DB.builder()
+      .select()
+      .from('users')
+      .where('email = ?', email)
+      .where('password = ?', password)
+      .toParam();
+      DB.executeQuery(query, (err, results1) => {
+        if (err) {
+          next(err);
+          return;
+        }
 
-          if (results1.rowCount) {
-            session.user_id = results1.rows[0].user_id;
-            // res.redirect('/welcome');
-            let dataobject = {
-              user_id : session.user_id,
-            }
-            res.end( JSON.stringify(dataobject));
-          } else {
-            // res.redirect('/login');
-          }
-        });
-      } else {
-        // res.redirect('/register');
-      }
-    });
+        if (results1.rowCount) {
+          session.user_id = results1.rows[0].user_id;
+          // res.redirect('/welcome');
+          const dataobject = {
+            user_id: session.user_id,
+          };
+          res.end(JSON.stringify(dataobject));
+        } else {
+          // res.redirect('/login');
+        }
+      });
+    } else {
+      // res.redirect('/register');
+    }
+  });
   // }
 });
 
@@ -244,13 +244,13 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.post('/register', (req, res, next) => {
-  console.log("----apiregister called");
+router.post('/register', (req, res) => {
+  console.log('----apiregister called');
 // , upload.single('profile')
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const username = req.body.userdata.username;
   const email = req.body.userdata.email;
@@ -286,44 +286,43 @@ router.post('/register', (req, res, next) => {
     //   photo = 'cover.jpg';
     // }
 
-    const query = DB.builder()
-    .insert()
-    .into('users')
-    .set('username', username)
-    .set('email', email)
-    .set('image', 'photo')
-    .set('mobilenumber', mobilenumber)
-    .set('password', password)
-    .toParam();
-    console.log(query);
-    DB.executeQuery(query, (error, answer) => {
-      if (error) {
-        console.log(error);
+  const query = DB.builder()
+  .insert()
+  .into('users')
+  .set('username', username)
+  .set('email', email)
+  .set('image', 'photo')
+  .set('mobilenumber', mobilenumber)
+  .set('password', password)
+  .toParam();
+  console.log(query);
+  DB.executeQuery(query, (error) => {
+    if (error) {
+      console.log(error);
+    }
+  //   console.log(answer,'^^^^^^^');
+    // let object= {
+    //          data: data.rows,
+              // count: c.rows.length,
+              // tweets: tweets.rows,
+            // }
 
-      }
-    //   console.log(answer,"^^^^^^^");
-      // let object= {
-      //          data: data.rows,
-                // count: c.rows.length,
-                // tweets: tweets.rows,
-              // }
+            // res.end( JSON.stringify(object));
 
-              // res.end( JSON.stringify(object));
-
-              // console.log(object);
-              //  res.end( JSON.stringify(object));
-      // res.redirect('/login');
-    });
+            // console.log(object);
+            //  res.end( JSON.stringify(object));
+    // res.redirect('/login');
+  });
   // }
 });
 
-router.post('/tweet/:id', upload.single('imagetweet'), (req, res, next) => {
-  console.log("----apitweet called");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  user_id = req.params.id;
+router.post('/tweet', upload.single('imagetweet'), (req, res) => {
+  console.log('----apitweet called');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  const userId = req.body.user_id;
   const tweet = req.body.userdata.tweet;
   // const session = req.session;
   // req.checkBody('tweet', 'Invalid length of tweet min= 8 max= 140').notEmpty().len(2, 140);
@@ -341,33 +340,32 @@ router.post('/tweet/:id', upload.single('imagetweet'), (req, res, next) => {
   //   } else {
   //     photo = '';
   //   }
-    const query = DB.builder()
-    .insert()
-    .into('tweet')
-    .set('tweet', tweet)
-    .set('userid', user_id)
-    // .set('imagetweet', 'photo')
-    .toParam();
-    DB.executeQuery(query, (error) => {
-      if (error) {
-        next(error);
-        return;
-      }
-      // res.redirect('/welcome');
-    });
+  const query = DB.builder()
+  .insert()
+  .into('tweet')
+  .set('tweet', tweet)
+  .set('userid', userId)
+  // .set('imagetweet', 'photo')
+  .toParam();
+  DB.executeQuery(query, (error) => {
+    if (error) {
+      console.log(error);
+    }
+    res.send('tweet api successfully called');
+    // res.redirect('/welcome');
+  });
   // }
 });
 
-router.get('/deletetweet/:id', (req, res, next) => {
-
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+router.get('/deletetweet/:id', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const tweetid = req.params.id;
-  console.log("----apiDeletetweet called");
-  console.log("----tweetiddelete --->", tweetid);
+  console.log('----apiDeletetweet called');
+  console.log('----tweetiddelete --->', tweetid);
 
   const query = DB.builder()
   .delete()
@@ -376,32 +374,32 @@ router.get('/deletetweet/:id', (req, res, next) => {
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {
-      next(error);
-      return;
+      console.log(error);
     }
+    res.send('Deletetweet api successfully called');
     // res.redirect('/profilechange');
   });
 });
 
-router.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    // res.redirect('/login');
-  });
-});
+// router.get('/logout', (req, res) => {
+//   req.session.destroy(() => {
+//     // res.redirect('/login');
+//   });
+// });
 
 router.get('/welcome/:id', (req, res, next) => {
-  user_id = req.params.id;
+  const userId = req.params.id;
   // const session = req.session;
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   let query;
-  if (user_id) {
+  if (userId) {
     query = DB.builder()
     .select()
     .from('users')
-    .where('user_id = ?', user_id)
+    .where('user_id = ?', userId)
     .toParam();
     DB.executeQuery(query, (error, results) => {
       if (error) {
@@ -412,13 +410,13 @@ router.get('/welcome/:id', (req, res, next) => {
       query = DB.builder()
       .select()
       .from('users')
-      .where('user_id != ?', user_id)
+      .where('user_id != ?', userId)
       .where('user_id NOT IN ?',
       DB.builder()
       .select()
       .field('follower_id')
       .from('follower')
-      .where('login_user_id = ?', user_id))
+      .where('login_user_id = ?', userId))
       .toParam();
       DB.executeQuery(query, (errorresults, follow) => {
         if (errorresults) {
@@ -441,7 +439,7 @@ router.get('/welcome/:id', (req, res, next) => {
         .select()
         .field('follower_id')
         .from('follower')
-        .where('login_user_id = ?', user_id)), user_id)
+        .where('login_user_id = ?', userId)), userId)
         .order('time', false)
         .toParam();
         DB.executeQuery(query, (errorfollow, tweets) => {
@@ -452,21 +450,21 @@ router.get('/welcome/:id', (req, res, next) => {
           query = DB.builder()
           .select()
           .from('follower')
-          .where('login_user_id = ?', user_id)
+          .where('login_user_id = ?', userId)
           .toParam();
           DB.executeQuery(query, (errortweets, c) => {
             if (errortweets) {
               next(errortweets);
               return;
             }
-            let object={
+            const object = {
               count: c.rows.length,
               follow: follow.rows,
               results: results.rows[0],
               tweets: tweets.rows,
-            }
-            console.log(object)
-            res.end( JSON.stringify(object));
+            };
+            console.log(object);
+            res.end(JSON.stringify(object));
             // res.render('welcome', {
             //   count: c.rows.length,
             //   follow: follow.rows,
@@ -483,15 +481,15 @@ router.get('/welcome/:id', (req, res, next) => {
 });
 
 router.get('/yourprofile/:id', (req, res, next) => {
-  console.log("----apiyourprofile called");
-  user_id = req.params.id;
+  console.log('----apiyourprofile called');
+  const userId = req.params.id;
   // const session = req.session;
   let query;
-  if (user_id) {
+  if (userId) {
     query = DB.builder()
     .select()
     .from('users')
-    .where('user_id = ?', user_id)
+    .where('user_id = ?', userId)
     .toParam();
     DB.executeQuery(query, (error, results) => {
       if (error) {
@@ -509,7 +507,7 @@ router.get('/yourprofile/:id', (req, res, next) => {
       .join(DB.builder()
       .select()
       .from('follower'), 'f', 'r.user_id = f.follower_id')
-      .where('login_user_id = ?', user_id)
+      .where('login_user_id = ?', userId)
       .toParam();
       DB.executeQuery(query, (errorresults, users) => {
         if (errorresults) {
@@ -529,7 +527,7 @@ router.get('/yourprofile/:id', (req, res, next) => {
         .join(DB.builder()
         .select()
         .from('users'), 'u', 't.userid = u.user_id')
-        .where('user_id = ?', user_id)
+        .where('user_id = ?', userId)
         .order('time', false)
         .toParam();
         DB.executeQuery(query, (errorusers, tweets) => {
@@ -540,21 +538,21 @@ router.get('/yourprofile/:id', (req, res, next) => {
           query = DB.builder()
           .select()
           .from('follower')
-          .where('login_user_id = ?', user_id)
+          .where('login_user_id = ?', userId)
           .toParam();
           DB.executeQuery(query, (errortweets, c) => {
             if (errortweets) {
               next(errortweets);
               return;
             }
-            let object={
+            const object = {
               count: c.rows.length,
               users: users.rows,
               results: results.rows[0],
               tweets: tweets.rows,
-            }
+            };
             console.log(object);
-            res.end( JSON.stringify(object));
+            res.end(JSON.stringify(object));
             // res.render('profilechange', {
             //   count: c.rows.length,
             //   tweets: tweets.rows,
@@ -571,27 +569,26 @@ router.get('/yourprofile/:id', (req, res, next) => {
 });
 
 router.get('/editprofile/:id', (req, res, next) => {
-  console.log("----apieditprofile called");
-  user_id = req.params.id;
+  console.log('----apieditprofile called');
+  const userId = req.params.id;
   // const session = req.session;
   let query;
-  if (user_id) {
+  if (userId) {
     query = DB.builder()
     .select()
     .from('users')
-    .where('user_id = ?', user_id)
+    .where('user_id = ?', userId)
     .toParam();
     DB.executeQuery(query, (error, results) => {
       if (error) {
         next(error);
         return;
       }
-      let object={
+      const object = {
         results: results.rows[0],
-
-      }
+      };
       console.log(object);
-      res.end( JSON.stringify(object));
+      res.end(JSON.stringify(object));
       // res.render('profilepictureupload', {
       //   results: results.rows,
       // });
@@ -599,56 +596,46 @@ router.get('/editprofile/:id', (req, res, next) => {
   }
 });
 
-router.post('/follow/:id', (req, res, next) => {
-
-// console.log("callledd", req.body.data.data);
-  var a = {"msg":""};
-  user_id = req.body.user_id;
-  console.log("----apifollow called");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+router.post('/follow', (req, res) => {
+// console.log('callledd', req.body.data.data);
+  const userId = req.body.user_id;
+  console.log('----apifollow called');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const id = req.body.followerId;
-  console.log('followerid--->', id );
-  console.log('user_id--->', user_id );
+  console.log('followerid--->', id);
+  console.log('user_id--->', userId);
   // const id = req.body.followerId;
   // const session = req.session;
   const query = DB.builder()
   .insert()
   .into('follower')
-  .set('login_user_id', user_id)
+  .set('login_user_id', userId)
   .set('follower_id', id)
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {
-      a['msg'] = "error";
-      res.send(a);
-      next(error);
-      return;
-    } else {
-      a['msg'] = "success";
-      res.send(a);
+      console.log(error);
     }
-
-    console.log(a);
 
     // let object={
     //   results: results.rows[0],
 
     // }
     // console.log(object);
-    // res.end( JSON.stringify(object));
+    res.send('API Follow called');
     // res.redirect('/welcome');
   });
 });
 
-router.post('/unfollow/:id', (req, res, next) => {
-  console.log("----api Unfollow called");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+router.post('/unfollow', (req, res) => {
+  console.log('----api Unfollow called');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const id = req.body.followerId;
   const query = DB.builder()
   .delete()
@@ -657,48 +644,55 @@ router.post('/unfollow/:id', (req, res, next) => {
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {
-      next(error);
-      return;
+      console.log(error);
     }
+    res.send('API UnFollow called');
     // res.redirect('/profilechange');
   });
 });
 
-router.post('/profilepictureupload', upload.single('thumbnail'), (req, res, next) => {
-  const session = req.session;
-  let photo = '';
-  if (req.file) {
-    photo = req.file.filename;
-  } else {
-    photo = '';
-  }
+router.post('/profilepictureupload/:id', upload.single('photo'), (req, res, next) => {
+  // console.log('request -----> ', req);
+  console.log('####profilepictureupload API called');
+  console.log('imgfile is ---> ', req.file);
+  console.log('imgfilename is ---> ', req.file.filename);
+  const user_id = req.params.id;
+  const photo = req.file.filename;
+
+  // const session = req.session;
+  // let photo = req.file.filename;
+  // // if (req.file) {
+  // //   photo = req.file.filename;
+  // // } else {
+  // //   photo = '';
+  // // }
   const query = DB.builder()
   .update()
   .table('users')
   .set('image', photo)
-  .where('user_id = ?', session.user_id)
+  .where('user_id = ?', user_id)
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {
       next(error);
       return;
     }
-
-    res.redirect('/profilechange');
+      res.send('image upload api called ');
+  //   res.redirect('/profilechange');
   });
 });
 
-router.post('/editprofile/:id', (req, res, next) => {
+router.post('/editprofile/:id', (req, res) => {
   // const session = req.session;
-  console.log("----api editprofile called");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  console.log('----api editprofile called');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const username = req.body.userdata.username;
   const email = req.body.userdata.email;
   const mobileno = req.body.userdata.mobilenumber;
-  const user_id = req.body.user_id;
+  const userId = req.body.user_id;
   // let password = '';
   // if (req.body.confirmpassword !== '') {
   //   password = req.body.confirmpassword;
@@ -712,13 +706,13 @@ router.post('/editprofile/:id', (req, res, next) => {
   .set('email', email)
   .set('mobilenumber', mobileno)
   // .set('password', password)
-  .where('user_id = ?', user_id)
+  .where('user_id = ?', userId)
   .toParam();
   DB.executeQuery(query, (error) => {
     if (error) {
-      next(error);
-      return;
+      console.log(error);
     }
+    res.send('Profile updated successfully');
     // res.redirect('/welcome');
   });
 });

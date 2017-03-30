@@ -20,13 +20,13 @@ const config = {
   min: 1, // set min pool size to 1
   idleTimeoutMillis: 1000, // how long a client is allowed to remain idle before being closed
 };
-console.log(config,"******");
+console.log(config, '******');
 const pool = new PoolCon(config);
 
 // Export
 module.exports = {
   executeQuery(query, callback) {
-    console.log(query,"-----");
+    console.log(query, '-----');
     return pool.query(query.text, query.values, callback);
   },
   builder() {

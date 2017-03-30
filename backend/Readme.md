@@ -1,10 +1,50 @@
-# Express app boilerplate
-
-Placeholder for actual content
-
-# twitter-clone-3
+# twitter-react-node Back-end
 
 twitter website built using Node.js, PostgreSQL and Express.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Folder Structure](#folder-structure)
+- [Setup](#setup)
+  - [npm i](#npm-i)
+  - [node app](#node-app)
+- [Features](#features)
+
+## Prerequisites
+
+* [Node.js >= 4.3.x/NPM](http://nodejs.org/download/)
+* [PostgreSQL](http://www.postgresql.org/download/)
+* [React](https://facebook.github.io/react/docs/installation.html)
+
+## Folder Structure
+
+After creation, your project should look like this:
+
+```
+backend/
+  helpers/
+    db.js
+  public/
+    css/
+      style.css
+    images/
+      cover.jpg
+    js/
+      twitter.js
+  routes/
+    index.js
+  test/
+    index.js
+  views/
+  app.js
+  example.env
+  script.sql
+  scripttest.sql
+  package.json
+  Readme.md
+
+```
 
 ## Prerequisites
 
@@ -13,24 +53,16 @@ twitter website built using Node.js, PostgreSQL and Express.
 
 ## Setup
 
-Install all dependencies
+## In the backend directory, you can run:
 
-```
-make install
-```
+### `npm i`
 
-Run The Software
+installs dependencies
 
-```
-make run
-```
-* server will be available at `http://localhost:3000`
+### `node app`
 
-Run Tests
+Runs the app in the development mode on port 8000.<br>
 
-```
-make test
-```
 
 ## Features
 

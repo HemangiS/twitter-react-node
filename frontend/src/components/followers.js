@@ -11,9 +11,11 @@ class Followers extends Component {
       data:'',
 
     }
-    // this.unfollowClick = this.unfollowClick.bind(this);
+    this.unfollowSubmit = this.unfollowSubmit.bind(this);
+    this.followersapicall = this.followersapicall.bind(this);
   }
-  componentWillMount() {
+
+  followersapicall() {
     let user_id = this.props.params.id;
     axios.get('http://localhost:8000/followers/' + user_id)
     .then(res => {
@@ -24,6 +26,25 @@ class Followers extends Component {
         data: data,
       })
 
+    });
+  }
+  componentWillMount() {
+    this.followersapicall();
+  }
+
+  unfollowSubmit(id) {
+
+    let self = this;
+    console.log('id----->', id);
+    axios.post(`http://localhost:8000/unfollow`, {
+      followerId: id,
+    })
+    .then(res => {
+      console.log("+++++++", res);
+      self.followersapicall();
+    })
+    .catch(function (error) {
+      console.log(error);
     });
 
   }
@@ -59,7 +80,7 @@ class Followers extends Component {
        phone = this.state.data.results.mobilenumber;
        let loginuserimgsrc = `http://localhost:8000/images/${this.state.data.results.image}`;
        userpic.push(
-          <img style={{align:'left'}} key={this.state.data.results.image.length} src={loginuserimgsrc} alt="userpic" height="200px" width="200px" className="fb-image-profile thumbnail img-responsive" />
+          <img style={{align:'left'}} key={this.state.data.results.image.length} src={loginuserimgsrc} alt="userpic" height="200px" width="200px" className="thumbnail img-responsive" />
        )
     }
 
@@ -72,7 +93,7 @@ class Followers extends Component {
 
     let tweetcount = 0;
     if(this.state.data.tweets) {
-      tweetcount = this.state.data.tweets;
+      tweetcount = this.state.data.tweets.length;
     }
     // console.log(this.state.data.users.length);
     // if(this.state.data.users == null) {console.log('null null null');} else { console.log('not null');}
@@ -82,16 +103,21 @@ class Followers extends Component {
     if(followercount !== 0) {
       for (var i = 0; i < this.state.data.users.length; i++) {
         let followerId = this.state.data.users[i].user_id;
-        let unfollowsrc = `/unfollow/${followerId}`;
+        // let unfollowsrc = `/unfollow/${followerId}`;
         let followinguserimgsrc = `http://localhost:8000/images/${this.state.data.users[i].image}`;
         followerItem.push(
           <div key={i} style={{paddingBottom: '25px'}} className="aligncenter col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12"><img src={followinguserimgsrc} alt="followerpic" height="140" width="140" className="img-circle" /><a href="/profile/">
               <h2 style={{fontSize: '15px'}} className="clr">{this.state.data.users[i].username}</h2></a>
-            <form method="post" action="/unfollow">
-              <input type="hidden" name="followerId" value={this.state.data.users[i].user_id} />
-              <a href={unfollowsrc} className="clrbtn btn-info btn btn-sm waves-effect waves-light">UnFollow</a>
 
-            </form>
+
+              <input
+                onClick={ (e) => {
+                  this.unfollowSubmit(followerId);
+                  e.preventDefault();
+                }}
+              type='submit' value='UnFollow' className="clrbtn btn-info btn btn-sm waves-effect waves-light" />
+
+
           </div>
         )
       }
@@ -112,46 +138,53 @@ class Followers extends Component {
 
           <img src="/images/cover.jpg" alt="cover" width="100%" className="fb-image-lg"/>
 
+          <div>
 
-            <div className="navbar-header">
+            <div className='fb-image-profile'>
+
+              {userpic}
+
+            </div>
+
+            <div className='myprofilenav'>
+
               <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2" aria-expanded="false">
                 <span className="sr-only">Toggle navigation</span>
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
+
+              <ul className="myul collapse navbar-collapse nav navbar-nav navbar-right" id="bs-example-navbar-collapse-2">
+
+                <li>
+                  <Link to={yourprofile}>
+
+                      &nbsp;Tweets&nbsp;<span className="badge">{tweetcount}</span>
+
+                  </Link>
+                </li>
+
+                <li>
+                  <Link to={followers} className='myactive'>
+
+                      &nbsp;Followers&nbsp;<span className="badge">{followercount}</span>
+
+                  </Link>
+                </li>
+
+                <li className='usernamestyle1'>
+
+                      <span className="usernamestyle">{username}</span>
+
+                </li>
+
+              </ul>
+
             </div>
 
-            <ul className="myul collapse navbar-collapse nav navbar-nav navbar-right" id="bs-example-navbar-collapse-2">
+          </div>
 
-              <li>
-                <Link to={yourprofile}>
-
-                    &nbsp;Tweets&nbsp;<span className="badge">{tweetcount}</span>
-
-                </Link>
-              </li>
-
-              <li>
-                <Link to={followers} className='myactive'>
-
-                    &nbsp;Followers&nbsp;<span className="badge">{followercount}</span>
-
-                </Link>
-              </li>
-
-              <li>
-                <Link to={welcome} className='usernamestyle'>
-
-                    Welcome&nbsp;{username}
-
-                </Link>
-              </li>
-
-            </ul>
-
-
-          {userpic}
           <p></p>
 
           <div style={style1} className="page-canvas">

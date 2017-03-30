@@ -28,41 +28,41 @@ class Header1 extends Component {
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <font className='clr'>
-                    <a href="/">
+                  <a href="/">
+                    <font className='clr'>
                       <i className=" glyphicon glyphicon-home">
                         &nbsp;Home
                       </i>
-                    </a>
-                  </font>
+                    </font>
+                  </a>
                 </li>
                 <li>
-                  <font className='clr'>
-                    <a href="/register">
+                  <a href="/register">
+                    <font className='clr'>
                       <i className=" glyphicon glyphicon-edit">
                         &nbsp;Register
                       </i>
-                    </a>
-                  </font>
+                    </font>
+                  </a>
                 </li>
 
                 <li>
-                  <font className='clr'>
-                    <a href="/login">
+                  <a href="/login">
+                    <font className='clr'>
                       <i className=" glyphicon glyphicon-user">
                         &nbsp;LogIn
                       </i>
-                    </a>
-                  </font>
+                    </font>
+                  </a>
                 </li>
                 <li>
-                  <font className='clr'>
-                    <a href="/about">
+                  <a href="/about">
+                    <font className='clr'>
                       <i className=" glyphicon glyphicon-search">
                         &nbsp;About us
                       </i>
-                    </a>
-                  </font>
+                    </font>
+                  </a>
                 </li>
               </ul>
             </div>

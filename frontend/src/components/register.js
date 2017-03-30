@@ -228,6 +228,18 @@ class Register extends Component {
           </div>
 
         </form>
+
+        <div><hr /></div>
+
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'right'}}>Already have Account! </p>
+          </div>
+          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="/login">
+            <button style={{marginBottom: '20px', float :"left"}} className="btn btn-info btn-lg">Log&nbsp;in</button></a>
+          </div>
+
+        </div>
       </div>
 
     );

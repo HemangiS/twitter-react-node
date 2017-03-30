@@ -1,6 +1,6 @@
 # twitter-react-node
 
-twitter website built using Node.js, PostgreSQL and Express.
+twitter website built using React, Node.js, PostgreSQL and Express.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

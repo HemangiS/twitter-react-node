@@ -11,6 +11,7 @@ class Login extends Component {
       email :'',
       password:'',
       errors: {},
+      user_id: '',
     };
     this.onFieldChange = this.onFieldChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,11 +22,12 @@ class Login extends Component {
       userdata: this.state,
     })
     .then(function (response) {
-      console.log(response);
+      console.log('response--->',response);
       // alert(response);
       // return false;
-      if (response.data.user_id) {
-        cookie.save('user_id', response.data.user_id);
+      if (response.data) {
+        let user_id = response.data.user_id;
+        cookie.save('user_id', user_id);
         browserHistory.push(`/welcome/${cookie.load('user_id')}`)
       } else {
         browserHistory.push("/login")
@@ -36,9 +38,6 @@ class Login extends Component {
     });
 
     e.preventDefault();
-    // this.setState({
-    //   showComponent: true,
-    // });
   }
 
   onFieldChange(event){
@@ -116,10 +115,25 @@ class Login extends Component {
               <input type="submit" name="Submit" value="Log In" className="submit form-control button btn-info"
                 onClick={this.handleSubmit}/>
             </div>
+
+
           </div>
 
           </div>
         </form>
+
+        <div><hr /></div>
+
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'right'}}>Don't yet registered! </p>
+          </div>
+          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="/register">
+            <button style={{marginBottom: '20px', float :"left"}} className="btn btn-info btn-lg">Sign&nbsp;Up</button></a>
+          </div>
+
+        </div>
+
       </div>
     );
   }

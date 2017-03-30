@@ -3,13 +3,41 @@ body {
 }
 
 .usernamestyle {
-  border-bottom: solid 3px #CA461A;
-  color: #CA461A !important;
-  font-weight: bolder;
+  /*border-bottom: solid 3px #CA461A;*/
+  font-size: 25px;
+  /*font-family: 'Nova Oval', cursive;*/
+  text-transform: uppercase;
 }
+
+.usernamestyle1 {
+  /*border-bottom: solid 3px #CA461A;*/
+  padding: 8px;
+  padding-bottom: 8px;
+  background-color: #f8f8f8;
+  border: 1px solid #e7e7e7;
+  color: #CA461A;
+  /*border-color: #e7e7e7;*/
+}
+
+/*.myul > .usernamestyle {
+  color: #CA461A;
+
+  border-bottom: solid 3px #CA461A;
+}*/
+
+/*.myul a:hover, .usernamestyle1 {
+  color: #CA461A;
+  border: none;
+
+  border-bottom: solid 3px #CA461A;
+}*/
 
 .clrbtn {
   background-color: #00aced;
+}
+
+.myprofilenav {
+  display: initial;
 }
 
 .myul {
@@ -18,14 +46,18 @@ body {
 }
 
 .myul a:hover {
-  border-bottom: solid 1px #00aced;
+  border-bottom: solid 3px #00aced;
+}
+
+.myul a:hover > .badge {
+  background-color: #00aced;
 }
 
 .myactive {
   border-bottom: solid 3px #00aced;
 }
 
-.badge {
+.myactive > .badge {
   background-color: #00aced;
 }
 
@@ -37,7 +69,15 @@ body {
 /* In welcome page */
 .tweetsinwelcome {
   padding: 0 25px;
-  height: 600px;
+  height: 550px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* In welcome page */
+.userpanel {
+  padding: 0 25px;
+  height: 725px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -373,13 +413,13 @@ margin-right: 7px;
     /*margin-bottom: 10px;*/
 }
 
-.fb-image-profile
+/*.fb-image-profile
 {
-    margin: -90px 10px 0px 50px;
+    margin: -25px 10px 25px 20px;
     z-index: 9;
     width: 20%;
-
-}
+    display: inline-block;
+}*/
 
 @media (max-width:991px) {
 
@@ -392,9 +432,27 @@ margin-right: 7px;
   overflow-x: hidden;
 }
 
+/*.fb-image-profile
+{
+    margin: -60px 10px -19px 40px;
+    z-index: 9;
+    width: 20%;
+    display: inline-block;
+}*/
+
 }
 
-@media (max-width:1910px) {
+@media (max-width:991px) and (min-width: 451px){
+.fb-image-profile
+{
+    margin: -50px 10px -19px 30px;
+    z-index: 9;
+    width: 20%;
+    display: inline-block;
+}
+
+}
+@media (max-width:1931px) and (min-width: 992px){
 
 /* In yourprofile page */
 
@@ -405,13 +463,31 @@ margin-right: 7px;
   overflow-x: hidden;
 }
 
+.fb-image-profile
+{
+  margin: -80px 10px 1px 50px;
+  z-index: 9;
+  width: 20%;
+  display: inline-block;
 }
 
+}
+
+@media (max-width: 450px) {
+  .fb-image-profile
+  {
+    margin: -25px 10px 1px 20px;
+    z-index: 9;
+    display: inline-block;
+    width: 20%;
+  }
+}
+/*
 @media (max-width:790px) {
 .fb-profile {
   width: 780px;
 }
-}
+}*/
 @media (max-width:768px) {
 
 .tweetsinyourprofile {
@@ -426,12 +502,14 @@ margin-right: 7px;
     font-size:16px;
 }
 
-.fb-image-profile
+
+
+/*.fb-image-profile
 {
     margin: -45px 10px 0px 25px;
     z-index: 9;
     width: 20%;
-}
+}*/
 
 /*card css*/
 .block-update-card {

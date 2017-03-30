@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookie';
-// import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 class Welcome extends Component {
 
@@ -14,38 +14,67 @@ class Welcome extends Component {
     }
     this.onFieldChange = this.onFieldChange.bind(this);
     this.tweetSubmit = this.tweetSubmit.bind(this);
+    this.followSubmit = this.followSubmit.bind(this);
+    this.welcomeapicall = this.welcomeapicall.bind(this);
   }
-  componentWillMount() {
 
-    let user_id = this.props.params.id;
-
-    axios.get(`http://localhost:8000/welcome/${user_id}`)
+  welcomeapicall() {
+    axios.get(`http://localhost:8000/welcome/${cookie.load('user_id')}`)
       .then(res => {
         const data= res.data;
-        console.log("-->", res.data)
+        // console.log("-->", res.data)
 
         this.setState({
           data: data,
         })
 
       });
+  }
+
+  componentWillMount() {
+    this.welcomeapicall();
 
   }
 
   tweetSubmit(e) {
-    e.preventDefault();
-    // let user_id = this.props.params.id;
-    axios.post(`http://localhost:8000/tweet/${cookie.load('user_id')}`, {
+    let self = this;
+    console.log("eeeeeee");
+    axios.post(`http://localhost:8000/tweet`, {
       userdata: this.state,
+      user_id: cookie.load('user_id'),
     })
     .then(function (response) {
-      // console.log(response);
+      console.log("+++++++", response);
+      self.welcomeapicall();
+      self.setState({
+        tweet: '',
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    // this.welcomeapicall();
+     e.preventDefault();
+  }
+
+  followSubmit(id) {
+    // let followuserid = this.props.params.id;
+    // e.preventDefault();
+    let self = this;
+    // alert('id----->', id);
+    console.log('id----->', id);
+    axios.post(`http://localhost:8000/follow`, {
+      followerId: id,
+      user_id: cookie.load('user_id'),
+    })
+    .then(res => {
+      console.log("+++++++", res);
+      self.welcomeapicall();
     })
     .catch(function (error) {
       console.log(error);
     });
 
-    window.location.href = `/welcome/${cookie.load('user_id')}`;
   }
 
   onFieldChange(event){
@@ -53,7 +82,7 @@ class Welcome extends Component {
     this.setState({
       [event.target.name]: event.target.value
     });
-    console.log("state---->", this.state, name);
+    // console.log("state---->", this.state, name);
 
   }
 
@@ -66,7 +95,7 @@ class Welcome extends Component {
     let followers = `/followers/${id}`;
     let editprofile = `/editprofile/${id}`;
 
-    console.log("[[[[[",this.state.data);
+    // console.log("[[[[[",this.state.data);
 
     let username;
     let userpic = [];
@@ -86,7 +115,7 @@ class Welcome extends Component {
         var a = this.state.data.tweets[i].time;
         let t = new Date(a);
         var tweettime = t.getDate() + "/" + (t.getMonth() + 1) +"/"+ t.getFullYear() + ' ' + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
-        console.log(tweettime)
+        // console.log(tweettime)
         // let tf = `${t}.getDate()&nbsp;`;
         let tweetuserimgsrc = `http://localhost:8000/images/${this.state.data.tweets[i].image}`;
         let tweetimg = '';
@@ -123,19 +152,24 @@ class Welcome extends Component {
     if(this.state.data.follow) {
 
       for (var j = 0; j < this.state.data.follow.length; j++) {
-        console.log('------>',this.state.data.follow[j].user_id);
+        // console.log('------>',this.state.data.follow[j].user_id);
         let followerId = this.state.data.follow[j].user_id;
-        let followsrc = `/follow/${followerId}`;
+        // let followsrc = `/follow/${followerId}`;
         let followuserimgsrc = `http://localhost:8000/images/${this.state.data.follow[j].image}`;
         users.push(
           <div key={j} className="row">
             <hr />
             <div className="aligncenter media block-update-card"><img src={followuserimgsrc} alt='followerpic' height="140" width="140" className="img-circle img-responsive" />
               <h6 className="clr">{this.state.data.follow[j].username}</h6>
-              <form>
-                <input type="hidden" name="followerId" value={followerId} />
-                <a href={followsrc} className="clrbtn btn-info btn btn-sm waves-effect waves-light">Follow</a>
-              </form>
+
+
+                <input
+                  onClick={ (e) => {
+                    this.followSubmit(followerId);
+                    e.preventDefault();
+                  }}
+                type='submit' className="clrbtn btn-info btn btn-sm waves-effect waves-light" value='Follow'/>
+
             </div>
           </div>
         )
@@ -176,7 +210,7 @@ class Welcome extends Component {
         </div>
 
         <div className="col-sm-6 col-xs-12 col-md-6">
-          <div className="profile-content">
+          <div style={{padding: '30px'}} className="profile-content page-canvas">
 
             <div className="row">
               <p className='clr'><i className="glyphicon glyphicon-pencil">&nbsp;</i>What's in your mind ??</p>
@@ -222,10 +256,12 @@ class Welcome extends Component {
         </div>
 
         <div className="col-sm-3 col-xs-12 col-md-3">
-          <div className="profile-content">
+          <div className="profile-content page-canvas">
             <div className="sidebar-menu">
               <p className="clr"><i className="glyphicon glyphicon-user">&nbsp;</i>People you may know</p>
+              <div className="userpanel">
               {users}
+              </div>
             </div>
           </div>
         </div>
