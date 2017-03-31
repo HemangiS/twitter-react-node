@@ -2,6 +2,21 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+.main {
+  width: 435px;
+  background-color: white;
+  border-radius: 3px;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+.navbar-default {
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  overflow: hidden;
+}
+
 .usernamestyle {
   /*border-bottom: solid 3px #CA461A;*/
   font-size: 25px;
@@ -118,8 +133,6 @@ body {
 .submit {
   width: 100%;
 }
-
-
 
 .page-canvas {
   border-radius: 6px;
@@ -480,6 +493,14 @@ margin-right: 7px;
     z-index: 9;
     display: inline-block;
     width: 20%;
+  }
+
+  .main {
+    width: 380px;
+    background-color: white;
+    border-radius: 3px;
+    margin: 10px auto;
+    padding: 20px;
   }
 }
 /*

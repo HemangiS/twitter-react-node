@@ -23,11 +23,13 @@ class Login extends Component {
     })
     .then(function (response) {
       console.log('response--->',response);
+
       // alert(response);
       // return false;
       if (response.data) {
         let user_id = response.data.user_id;
-        cookie.save('user_id', user_id);
+        cookie.save('user_id', user_id, {path: '/'});
+         // return false;
         browserHistory.push(`/welcome/${cookie.load('user_id')}`)
       } else {
         browserHistory.push("/login")
@@ -53,11 +55,11 @@ class Login extends Component {
   render(){
     console.log("from component:", this.state);
     return(
-      <div>
+      <div className="container">
         <form action="/login" method="post" className="form-horizontal">
-          <div className="signin-wrapper myform">
+          <div className="signin-wrapper">
             <div className="form-group">
-              <div className="col-sm-7 col-xs-8 col-lg-3 col-md-4">
+              <div className="col-sm-7 col-xs-10 col-lg-3 col-md-4">
                 <h2 className="clr">Log in to Twitter</h2>
               </div>
             </div>
@@ -67,7 +69,7 @@ class Login extends Component {
               </div>
             </div>
             <div className="form-group">
-              <div className="col-sm-7 col-xs-8 col-lg-3 col-md-4">
+              <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
                 <input
                   onChange={this.onFieldChange}
                   value={this.state.email}
@@ -85,7 +87,7 @@ class Login extends Component {
               </div>
             </div>
             <div className="form-group">
-              <div className="col-sm-7 col-xs-8 col-lg-3 col-md-4">
+              <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
                 <input
                   onChange={this.onFieldChange}
                   value={this.state.password}
@@ -98,7 +100,7 @@ class Login extends Component {
               </div>
             </div>
             <div className="form-group">
-              <div className="col-sm-7 col-xs-8 col-lg-3 col-md-4">
+              <div className="col-sm-7 col-xs-10 col-lg-3 col-md-4">
                 <div className="regcheck">
                 <form action="/retrive_password" method="post">
                 <input className="formcheckbox" type="checkbox" name="agreement" />&nbsp;Remember me&nbsp;<span className="separator">&middot;&nbsp;</span>
@@ -110,29 +112,32 @@ class Login extends Component {
             </div>
 
             <div className="form-group">
-            <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
+              <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
 
-              <input type="submit" name="Submit" value="Log In" className="submit form-control button btn-info"
-                onClick={this.handleSubmit}/>
+                <input type="submit" name="Submit" value="Log In" className="submit form-control button btn-info"
+                  onClick={this.handleSubmit}/>
+              </div>
+
+
             </div>
 
+            <div className="form-group"><div className="col-sm-6 col-xs-12 col-lg-4 col-md-4"><hr /></div></div>
 
-          </div>
+
 
           </div>
         </form>
 
-        <div><hr /></div>
+        <div className="form-group">
+          <div className="col-sm-6 col-xs-12 col-lg-4 col-md-4">
+            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'left'}}>Don't yet registered! </p>
 
-        <div className="row">
-          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'right'}}>Don't yet registered! </p>
-          </div>
-          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="/register">
-            <button style={{marginBottom: '20px', float :"left"}} className="btn btn-info btn-lg">Sign&nbsp;Up</button></a>
+         <a href="/register">
+            <button style={{marginBottom: '20px', float :"right"}} className="btn btn-info btn-lg">Sign&nbsp;Up</button></a>
           </div>
 
         </div>
+
 
       </div>
     );

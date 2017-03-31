@@ -4,11 +4,16 @@ import Header1 from './headers/header1';
 class App1 extends Component {
   render(){
     return(
-      <div className="container col-sm-12">
+      <div>
+      <Header1 />
+      <div style={{marginTop: '60px'}} className="container">
+        <div className='main'>
         <div className="page-canvas">
-          <Header1 />
+
           {this.props.children}
         </div>
+        </div>
+      </div>
       </div>
     );
   }

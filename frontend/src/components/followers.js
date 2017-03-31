@@ -16,8 +16,8 @@ class Followers extends Component {
   }
 
   followersapicall() {
-    let user_id = this.props.params.id;
-    axios.get('http://localhost:8000/followers/' + user_id)
+    // let user_id = this.props.params.id;
+    axios.get(`http://localhost:8000/followers/${cookie.load('user_id')}`)
     .then(res => {
       const data= res.data;
       console.log("-->", res.data)

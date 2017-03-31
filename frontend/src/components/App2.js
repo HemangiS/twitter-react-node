@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 
 class App2 extends Component {
   componentWillMount() {
+    console.log("set cookie is:",cookie.load('user_id'));
     var coki =  cookie.load('user_id');
     if(coki) {
     } else {
@@ -14,11 +15,13 @@ class App2 extends Component {
 
   render(){
     return(
-      <div className="container fb-profile col-sm-12">
-        <div className="page-canvas">
-          <Header2 />
+      <div><Header2 />
+      <div style={{marginTop: '60px'}} className="container fb-profile">
+        <div style={{padding: '20px 0px 20px 0px', marginRight: '20px'}} className="page-canvas">
+
           {this.props.children}
         </div>
+      </div>
       </div>
     );
   }

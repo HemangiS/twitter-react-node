@@ -14,79 +14,161 @@ class Register extends Component {
       password:'',
       confirmpassword:'',
       errors: {},
+      flagusername: 0,
+      flagemail: 0,
+      flagmobilenumber: 0,
+      flagpassword: 0,
+      flagconfirmpassword: 0,
     };
     this.onFieldChange = this.onFieldChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    // this.isValidate = this.isValidate.bind(this);
+    this.usernameValidate = this.usernameValidate.bind(this);
+    this.mobilenumberValidate = this.mobilenumberValidate.bind(this);
+    this.emailValidate = this.emailValidate.bind(this);
+    this.passwordValidate = this.passwordValidate.bind(this);
+    this.confirmpasswordValidate = this.confirmpasswordValidate.bind(this);
   }
 
-  isValidate() {
-    var username = document.registrationform.username.value.trim();
-    var password = document.registrationform.password.value.trim();
-    var confirmpassword = document.registrationform.confirmpassword.value.trim();
-    var mobilenumber = document.registrationform.mobilenumber.value.trim();
+  onFieldChange(event){
+    this.setState({
+      [event.target.name]: event.target.value.trim()
+    });
+  }
 
+  usernameValidate(e) {
+    this.onFieldChange(e);
+    let username = document.registrationform.username.value.trim();
     if(username.length < 1) {
+      this.setState({
+        flagusername: 0,
+      });
       document.getElementById("usernameerr").innerHTML = "Please enter your name";
     } else {
+      this.setState({
+        flagusername: 1,
+      });
       document.getElementById("usernameerr").innerHTML = "";
+      // document.getElementById("usernamehidden").innerHTML = "usersuccess";
     }
+  }
 
+  emailValidate(e) {
+    this.onFieldChange(e);
+    let email = document.registrationform.email.value.trim();
+    let atpos = email.indexOf('@');
+    let dotpos = email.lastIndexOf('.');
+    if (email.length < 1) {
+      this.setState({
+        flagemail: 0,
+      });
+      document.getElementById("emailerr").innerHTML = "Please enter your email";
+    } else if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length) {
+      this.setState({
+        flagemail: 0,
+      });
+      document.getElementById("emailerr").innerHTML = "Please enter valid email";
+    } else {
+      this.setState({
+        flagemail: 1,
+      });
+      document.getElementById("emailerr").innerHTML = "";
+    }
+  }
+
+  mobilenumberValidate(e) {
+    this.onFieldChange(e);
+    let mobilenumber = document.registrationform.mobilenumber.value.trim();
     if(mobilenumber.length < 1) {
+      this.setState({
+        flagmobilenumber: 0,
+      });
       document.getElementById("mobileerr").innerHTML = "Please enter your mobile number";
     } else if(mobilenumber.length !== 10) {
+      this.setState({
+        flagmobilenumber: 0,
+      });
       document.getElementById("mobileerr").innerHTML = "Plaese enter valid mobile no";
     } else {
+      this.setState({
+        flagmobilenumber: 1,
+      });
       document.getElementById("mobileerr").innerHTML = "";
     }
+  }
 
+  passwordValidate(e) {
+    this.onFieldChange(e);
+    let password = document.registrationform.password.value.trim();
     if(password.length < 1) {
+      this.setState({
+        flagpassword: 0,
+      });
       document.getElementById("passworderr").innerHTML = "This field is required";
+    } else {
+      this.setState({
+        flagpassword: 1,
+      });
+      document.getElementById("passworderr").innerHTML = "";
     }
     // else if(password.length<6){
     //   document.getElementById("passworderr").innerHTML=
     //   "Password must be at least 6 char long";
     // }
-    else {
-      document.getElementById("passworderr").innerHTML = "";
-    }
+  }
 
-    if(confirmpassword.length < 1) {
+  confirmpasswordValidate(e) {
+    this.onFieldChange(e);
+    let password = document.registrationform.password.value.trim();
+    let cpassword = document.registrationform.confirmpassword.value.trim();
+    if(cpassword.length < 1) {
+      this.setState({
+        flagconfirmpassword: 0,
+      });
       document.getElementById("cpassworderr").innerHTML = "This field is required";
-    } else if(confirmpassword !== password){
-      document.getElementById("cpassworderr").innerHTML=
-      "Password must be match";
+    } else if(cpassword !== password){
+      this.setState({
+        flagconfirmpassword: 0,
+      });
+      document.getElementById("cpassworderr").innerHTML="Password must be match";
     } else {
+      this.setState({
+        flagconfirmpassword: 1,
+      });
       document.getElementById("cpassworderr").innerHTML = "";
     }
-
   }
 
   handleSubmit(e){
     e.preventDefault();
-    axios.post('http://localhost:8000/register', {
-      userdata: this.state,
-    })
-    .then(function (response) {
-      // console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    browserHistory.push('/login');
-
-
-    // this.isValidate();
+    let fu= this.state.flagusername;
+    console.log('fu-----', fu);
+    let fm= this.state.flagmobilenumber;
+    console.log('fm-----', fm);
+    let fe= this.state.flagemail;
+    console.log('fe-----', fe);
+    let fp= this.state.flagpassword;
+    console.log('fp-----', fp);
+    let fcp= this.state.flagconfirmpassword;
+    console.log('fcp-----', fcp);
+    if((fu && fm && fe && fp && fcp) !== 0) {
+      console.log('success');
+      axios.post('http://localhost:8000/register', {
+        userdata: this.state,
+      })
+      .then(function (response) {
+        console.log(response);
+        browserHistory.push('/login');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    } else {
+      console.log('failure');
+    }
   }
 
-  onFieldChange(event){
-    const target = event.target;
-    const name = target.name;
-    this.setState({
-      [name]: event.target.value
-    });
-    console.log("state---->", this.state, name);
 
-  }
 
   render() {
 
@@ -94,11 +176,13 @@ class Register extends Component {
       color: 'red'
     };
 
+    // console.log("this state flag---->", this.state.flag);
+
     console.log("from component:", this.state);
     return (
       <div className="container">
         <h2 className="clr">Join twitter Today!!</h2>
-        <form name="registrationform" action="/register" method="post" encType="multipart/form-data" className="form-horizontal">
+        <form name="registrationform" encType="multipart/form-data" className="form-horizontal">
 
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
@@ -108,14 +192,14 @@ class Register extends Component {
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
               <input
-                onChange={this.onFieldChange}
+                onChange={this.usernameValidate}
                 value={this.state.username}
                 type="text"
                 id="name"
                 name="username"
                 placeholder="Jone Doe"
                 className="form-control form-control-inline"
-                required="required"
+                required
               />
               <span style={errstyle} id="usernameerr"></span>
             </div>
@@ -128,7 +212,7 @@ class Register extends Component {
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
               <input
-                onChange={this.onFieldChange}
+                onChange={this.mobilenumberValidate}
                 value={this.state.mobilenumber}
                 type="number"
                 name="mobilenumber"
@@ -136,7 +220,7 @@ class Register extends Component {
                 maxLength="10"
                 placeholder="Please enter a ten digit phone number"
                 className="form-control form-control-inline"
-                required="required"
+                required
               />
               <span style={errstyle} id="mobileerr"></span>
             </div>
@@ -149,14 +233,15 @@ class Register extends Component {
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
               <input
-                onChange={this.onFieldChange}
+                onChange={this.emailValidate}
                 value={this.state.email}
                 type="email"
                 name="email"
                 placeholder="foobar@inc.com"
                 className="form-control form-control-inline"
-                required="required"
+                required
               />
+              <span style={errstyle} id="emailerr"></span>
             </div>
           </div>
           <div className="form-group">
@@ -168,14 +253,14 @@ class Register extends Component {
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
               <input
-                onChange={this.onFieldChange}
+                onChange={this.passwordValidate}
                 value={this.state.password}
                 type="password"
                 id="password"
                 name="password"
                 placeholder="password"
                 className="form-control form-control-inline"
-                required="required"
+                required
               />
               <span style={errstyle} id="passworderr"></span>
             </div>
@@ -188,7 +273,7 @@ class Register extends Component {
           <div className="form-group">
             <div className="col-sm-6 col-xs-10 col-lg-4 col-md-4">
               <input
-                onChange={this.onFieldChange}
+                onChange={this.confirmpasswordValidate}
                 value={this.state.confirmpassword}
                 type="password"
                 id="confirmPassword"
@@ -227,19 +312,27 @@ class Register extends Component {
             </div>
           </div>
 
+          <div className="form-group"><div className="col-sm-6 col-xs-11 col-lg-4 col-md-4"><hr /></div></div>
+
+
+
         </form>
 
-        <div><hr /></div>
+        <div className="form-group">
+         <div className="col-sm-6 col-xs-11 col-lg-4 col-md-4">
 
-        <div className="row">
-          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'right'}}>Already have Account! </p>
-          </div>
-          <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6"><a href="/login">
-            <button style={{marginBottom: '20px', float :"left"}} className="btn btn-info btn-lg">Log&nbsp;in</button></a>
+            <p style={{color: 'blue', fontSize: '20px', marginTop: '10px', float : 'left'}}>Already have Account! </p>
+
+          <a href="/login">
+            <button style={{marginBottom: '20px', float :"right"}} className="btn btn-info btn-lg">Log&nbsp;in</button></a>
+
           </div>
 
         </div>
+
+
+
+
       </div>
 
     );

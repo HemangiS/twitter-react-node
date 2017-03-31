@@ -245,6 +245,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
+  // , upload.single('photo')
   console.log('----apiregister called');
 // , upload.single('profile')
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -252,10 +253,21 @@ router.post('/register', (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  // console.log('####profilepictureupload API called');
+  // console.log('imgfile is ---> ', req.file);
+  // console.log('imgfilename is ---> ', req.file.filename);
+  // const user_id = req.params.id;
+  // const photo = req.file.filename;
+
   const username = req.body.userdata.username;
   const email = req.body.userdata.email;
   const mobilenumber = req.body.userdata.mobilenumber;
   const password = req.body.userdata.password;
+
+  console.log('username is ---> ', username);
+  console.log('email is ---> ', email);
+  console.log('mobilenumber is ---> ', mobilenumber);
+  console.log('password is ---> ', password);
   // const username = req.sanitize('username').trim();
   // const email = req.sanitize('email').trim();
   // const mobilenumber = req.sanitize('mobilenumber').trim();
@@ -291,7 +303,7 @@ router.post('/register', (req, res) => {
   .into('users')
   .set('username', username)
   .set('email', email)
-  .set('image', 'photo')
+  .set('image', '8e5323f97f734fe7016955cc8df10be6')
   .set('mobilenumber', mobilenumber)
   .set('password', password)
   .toParam();
@@ -300,18 +312,8 @@ router.post('/register', (req, res) => {
     if (error) {
       console.log(error);
     }
-  //   console.log(answer,'^^^^^^^');
-    // let object= {
-    //          data: data.rows,
-              // count: c.rows.length,
-              // tweets: tweets.rows,
-            // }
+    res.send('----register called successfully----');
 
-            // res.end( JSON.stringify(object));
-
-            // console.log(object);
-            //  res.end( JSON.stringify(object));
-    // res.redirect('/login');
   });
   // }
 });
@@ -381,11 +383,12 @@ router.get('/deletetweet/:id', (req, res) => {
   });
 });
 
-// router.get('/logout', (req, res) => {
-//   req.session.destroy(() => {
-//     // res.redirect('/login');
-//   });
-// });
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    // res.redirect('/login');
+  });
+  res.send('logout successfully');
+});
 
 router.get('/welcome/:id', (req, res, next) => {
   const userId = req.params.id;
